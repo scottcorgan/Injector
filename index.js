@@ -43,6 +43,15 @@ app.module('Dep1', function () {
     };
 });
 
+// app.module('Dep2', function () {
+//     // console.log('Dep2 called');
+//     return {
+//         test2: function () {
+//             console.log('dep2 test2');
+//         }
+//     };
+// });
+
 
 
 

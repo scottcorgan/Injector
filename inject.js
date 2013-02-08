@@ -14,8 +14,13 @@
  */
 
 
+// Constants
+
 var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
 var NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
+
+
+var Module = require('./module');
 
 //
 
@@ -25,6 +30,7 @@ var NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
  * @param {Object} args         
  */
 var Inject = function (injectorName, args) {
+    var self = this;
     
     /*
         
@@ -41,6 +47,12 @@ var Inject = function (injectorName, args) {
     // Modules
     
     this.modules = {};
+    
+    //
+    
+    process.nextTick(function () {
+        self.init();
+    });
 };
 
 /**
@@ -99,7 +111,7 @@ Inject.prototype.register = function (args) {
     
     // For method chaining
     
-    return this;
+    return this.modules[args.name];
 };
 
 /**
@@ -134,9 +146,14 @@ Inject.prototype.resolveDependencies = function (moduleDeps) {
 
 Inject.prototype.bootstrap = function (module, deps) {
     var self = this;
-
+    
+    // Module is not a function
+    
+    if (typeof module.val !== 'function') {
+        module.bootstrapped = module.val;
+    }
+    
     // The module was already bootstrapped
-        
     if(module.bootstrapped !== NOT_BOOSTRAPPED) {
         return module;
     }
@@ -170,24 +187,24 @@ Inject.prototype.init = function () {
 };
 
 
-// /**
-//  * Set up a constant for the app
-//  * @param  {String} name
-//  * @param  {String} val  
-//  * @return {Object?}
-//  */
-// Inject.prototype.constant = function (name, val) {
+/**
+ * Set up a constant for the app
+ * @param  {String} name
+ * @param  {String} val  
+ * @return {Object?}
+ */
+Inject.prototype.constant = function (name, val) {
     
-//     var constant = this.register({
-//         name: name,
-//         val: val,
-//         errMsg: 'Cannot have two constants with the same name.'
-//     });
+    var constant = this.register({
+        name: name,
+        val: val,
+        errMsg: 'Cannot have two constants with the same name.'
+    });
     
-//     //
+    //
     
-//     return contsant;
-// };
+    return constant;
+};
 
 /**
  * Module: this is the basic dependency in the app

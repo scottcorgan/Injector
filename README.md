@@ -42,6 +42,8 @@ var app = Injector.create('OurApplication', {
 
 All module files must start with a basic Nodejs ` module.exports ` and be housed within a ` funciton (app) {} `. The ` app ` variable is our injector object. From this, we can register our modules. A module export wil have no more and no less than the one argument ` app `.
 
+A module in a module file will only be bootstrapped if in the folder specified in the ` directory: ` value *(See Setup)*.
+
 ```javascript
 module.exports = function (app) {
     
@@ -74,7 +76,7 @@ module.exports = function (app) {
 
 There are 2 available API methods for registering a module.
 
-### app.module(Name, Value)
+### module(Name, Value)
 * **Name:** The name of our module
 * **Value:** The value of our module. This can be a function, an object, or a basic value (string, number, etc.)
 
@@ -100,12 +102,19 @@ app.module('SomeValueModule', 'This sentence is useless ... maybe.');
 
 ```
 
+* * *
 
-
-### app.constant(Name, Value)
+### constant(Name, Value)
 * **Name:** The name of our constant
 * **Value:** The value of our constant. This can be a function, an object, or a basic value (string, number, etc.), **BUT** constants cannot receive injected dependencies.
 
 Constants are basically simplified modules. The reason this is in the API is for readability. ` app.constant ` is only a modified wrapper on top of ` app.module `.
 
 ##### Example
+```javascript
+
+// Basic constant difinition
+
+app.constant(PI, 3.14159);
+
+```

@@ -45,7 +45,6 @@ var Inject = function (injectorName, args) {
     
     this.walker.on('file', function (root, fileStats, next) {
         
-        
         // Only init javascript files we don't exclude
         
         var fileNameArr = fileStats.name.split('.');
@@ -167,7 +166,12 @@ Inject.prototype.resolveDependencies = function (moduleDeps) {
     });
 };
 
-
+/**
+ * Parse our dependencies and execute them
+ * @param  {Object} module 
+ * @param  {Array} deps  
+ * @return {Object}
+ */
 Inject.prototype.parse = function (module, deps) {
     var self = this;
     

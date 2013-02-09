@@ -1,6 +1,7 @@
 {
   "name": "injector",
   "version": "0.1.8",
+  "main": "injector.js",
   "description": "Basic dependency injection for Nodejs.",
   "dependencies": {
     "walk": "~2.2.1"

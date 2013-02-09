@@ -9,7 +9,7 @@ var walk = require('walk'),
 // Constants
 
 var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m,
-    MODULE_FINDER_EXP = /\s?function\s?injector\s?[(]\s?app\s?[)]/,
+    MODULE_FINDER_EXP = /module.exports\s?=\s?function\s?injector\s?[(]\s?app\s?[)]/,
     NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
 
 /**
@@ -45,20 +45,21 @@ var Injector = function (injectorName, args) {
             return next();
         }
         
-        var fileName = path.join(root, fileStats.name);  
-        var moduleFile = require(fileName);
+        var fileName = path.join(root, fileStats.name);
         
-        // Test for injection request
+        // Read file as string and match against injector
         
-        if(typeof moduleFile === 'function') {
-            var parsedFunction = moduleFile.toString();
-            if (parsedFunction.match(MODULE_FINDER_EXP)) {
+        fs.readFile(fileName, 'utf8', function (err, file) {
+            if (file.match(MODULE_FINDER_EXP)) {
                 
                 // Add the modules if it's an injectable set
                 
-                moduleFile(self);
+                require(fileName)(self);
             }
-        }
+            return;
+        });
+        
+        // Move onto next file
         
         next();
     });
@@ -67,6 +68,9 @@ var Injector = function (injectorName, args) {
     
     this.walker.on('end', function () {
         self.bootstrap();
+        
+        // Emit event here that let's people know application was bootstrapped/loaded
+        
     });
 };
 

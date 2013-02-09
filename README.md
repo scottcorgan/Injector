@@ -40,7 +40,7 @@ var app = Injector.create('OurApplication', {
 
 ### A Basic Module
 
-All module files must start with a basic Nodejs ` module.exports ` and be housed within a ` funciton (app) {} `. The ` app ` variable is our injector object. From this, we can register our modules.
+All module files must start with a basic Nodejs ` module.exports ` and be housed within a ` funciton (app) {} `. The ` app ` variable is our injector object. From this, we can register our modules. A module export wil have no more and no less than the one argument ` app `.
 
 ```javascript
 module.exports = function (app) {
@@ -78,8 +78,25 @@ There are 2 available API methods for registering a module.
 * **Name:** The name of our module
 * **Value:** The value of our module. This can be a function, an object, or a basic value (string, number, etc.)
 
-#### Example
+##### Example
 ```javascript
+
+// Function module defintion
+
+app.module('SomeModule', function () {
+    // Do stuff here ...
+});
+
+// Object module definition
+
+app.module('SomeObjectModule', {
+    value1: 'value1'
+    // etc.
+});
+
+// Value module definition
+
+app.module('SomeValueModule', 'This sentence is useless ... maybe.');
 
 ```
 

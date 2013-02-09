@@ -21,11 +21,11 @@ var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m,
     NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
 
 /**
- * Inject constructor
+ * Injector constructor
  * @param {String} injectorName 
  * @param {Object} args         
  */
-var Inject = function (injectorName, args) {
+var Injector = function (injectorName, args) {
     var self = this;
     
     // Set up defaults
@@ -82,7 +82,7 @@ var Inject = function (injectorName, args) {
  * @param  {String} moduleName 
  * @return {Object}            
  */
-Inject.prototype.getModule = function (moduleName) {
+Injector.prototype.getModule = function (moduleName) {
     return this.modules[moduleName];
 };
 
@@ -91,7 +91,7 @@ Inject.prototype.getModule = function (moduleName) {
  * @param  {Object} module
  * @return {Array} args
  */
-Inject.processArgs = function (module) {
+Injector.processArgs = function (module) {
     var depsStr =  module.toString().match(FN_ARGS),
         deps = (depsStr) ? depsStr[1].split(',') : [''];
     
@@ -113,7 +113,7 @@ Inject.processArgs = function (module) {
  * @param  {Object} args 
  * @return {Object}
  */
-Inject.prototype.register = function (args) {
+Injector.prototype.register = function (args) {
     
     var _errMsg = args.errMsg || 'Cannot have two items with the same name.';
     
@@ -141,7 +141,7 @@ Inject.prototype.register = function (args) {
  * Dependencies that don't exist return null;
  * @return {Null} 
  */
-Inject.imaginaryDependency = function () {
+Injector.imaginaryDependency = function () {
     return null;
 };
 
@@ -150,7 +150,7 @@ Inject.imaginaryDependency = function () {
  * @param  {Array} moduleDeps 
  * @return {Array}
  */
-Inject.prototype.resolveDependencies = function (moduleDeps) {
+Injector.prototype.resolveDependencies = function (moduleDeps) {
     var self = this;
     
     // Resolve dependency logic
@@ -159,7 +159,7 @@ Inject.prototype.resolveDependencies = function (moduleDeps) {
         var module = self.getModule(depName);
         
         if(depName === '' || !module) {
-            return Inject.imaginaryDependency();
+            return Injector.imaginaryDependency();
         }
         
         return module.bootstrapped;
@@ -172,7 +172,7 @@ Inject.prototype.resolveDependencies = function (moduleDeps) {
  * @param  {Array} deps  
  * @return {Object}
  */
-Inject.prototype.parse = function (module, deps) {
+Injector.prototype.parse = function (module, deps) {
     var self = this;
     
     // Module is not a function
@@ -204,7 +204,7 @@ Inject.prototype.parse = function (module, deps) {
 };
 
 
-Inject.prototype.bootstrap = function () {
+Injector.prototype.bootstrap = function () {
     var self = this    
     
     // Bootstrap each module once
@@ -221,7 +221,7 @@ Inject.prototype.bootstrap = function () {
  * @param  {String} val  
  * @return {Object?}
  */
-Inject.prototype.constant = function (name, val) {
+Injector.prototype.constant = function (name, val) {
     
     var constant = this.register({
         name: name,
@@ -240,11 +240,11 @@ Inject.prototype.constant = function (name, val) {
  * @param  {Function/Object} logic 
  * @return {Function/Object}
  */
-Inject.prototype.module = function (name, logic) {
+Injector.prototype.module = function (name, logic) {
     
     // Get our dependencies
     
-    var deps = Inject.processArgs(logic);
+    var deps = Injector.processArgs(logic);
     
     // Register the module
     
@@ -261,16 +261,16 @@ Inject.prototype.module = function (name, logic) {
 };
 
 /**
- * Instantiants Inject with unlimited arguments
+ * Instantiants Injector with unlimited arguments
  * @return {Object}
  */
-Inject.create = function () {
+Injector.create = function () {
     var args = Array.prototype.slice.call(arguments);
     
     function I() {
-        return Inject.apply(this, args);
+        return Injector.apply(this, args);
     }
-    I.prototype = Inject.prototype;
+    I.prototype = Injector.prototype;
     
     return new I();
 };
@@ -278,4 +278,4 @@ Inject.create = function () {
 
 // Export our module
 
-module.exports = Inject;
+module.exports = Injector;

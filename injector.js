@@ -1,13 +1,5 @@
 "use strict";
 
-/**
- 
- * create injection
-     * walk the directories
- 
- 
- */
-
 // Node modules
 
 var walk = require('walk'),
@@ -39,6 +31,7 @@ var Injector = function (injectorName, args) {
     // Find all of our modules by walking the dirctories recursively
     
     // Set up the directory/file walker
+    // 
     this.walker = walk.walk(this.modulesDirectory, {
         followLinks: false
     });
@@ -203,7 +196,9 @@ Injector.prototype.parse = function (module, deps) {
     return module
 };
 
-
+/**
+ * Start the injection and init the modules
+ */
 Injector.prototype.bootstrap = function () {
     var self = this    
     

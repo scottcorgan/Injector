@@ -42,7 +42,7 @@ var app = Injector.create('OurApplication', {
 
 All module files must start with a basic Nodejs ` module.exports ` and be housed within a ` funciton (app) {} `. The ` app ` variable is our injector object. From this, we can register our modules. A module export wil have no more and no less than the one argument ` app `.
 
-A module in a module file will only be bootstrapped if in the folder specified in the ` directory: ` value *(See Setup)*.
+A module in a module file will only be bootstrapped if in the folder specified in the ` directory: ` value *(See [Setup](https://github.com/scottcorgan/Injector/blob/master/README.md#setup))*.
 
 ```javascript
 module.exports = function (app) {

@@ -102,4 +102,10 @@ app.module('SomeValueModule', 'This sentence is useless ... maybe.');
 
 
 
-* ` app.constant('SOME_CONSTANT', ConstantValue); `
+### app.constant(Name, Value)
+* **Name:** The name of our constant
+* **Value:** The value of our constant. This can be a function, an object, or a basic value (string, number, etc.), **BUT** constants cannot receive injected dependencies.
+
+Constants are basically simplified modules. The reason this is in the API is for readability. ` app.constant ` is only a modified wrapper on top of ` app.module `.
+
+##### Example

@@ -209,7 +209,7 @@ Injector.prototype.bootstrap = function () {
     
     // Bootstrap each module once
     
-    Object.keys(this.modules).forEach(function (moduleName, idx, allModuleNames) {
+    Object.keys(this.modules).forEach(function (moduleName) {
         self.parse(self.getModule(moduleName));
     });
 };

@@ -2,13 +2,17 @@
 
 Basic dependency injection for Nodejs.
 
+And when I say basic, I mean basic. The idea with building this module was to create an open, flexible module system and not enforce new structures and coding styles.
+
 ## Installation
 
 ```
 npm install injector
 ```
 
-## Example
+## Usage
+
+### Setup
 
 ```javascript
 
@@ -29,6 +33,23 @@ var app = Injector.create('OurApplication', {
     
     exclude: ['modules/models'] // this would be ./modules/models
 });
+```
 
 
+### A Basic Module
+
+```javascript
+module.exports = function (app) {
+    
+    // Declare our module here
+    
+    app.module('SomeModule', function () {
+        return {
+            someApiMethod: function () {
+                //
+            }
+        }
+    });
+    
+};
 ```

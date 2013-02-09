@@ -1,4 +1,4 @@
-module.exports = function (app) {
+module.exports = function injector (app) {
     
     app.constant('PI', 3.14159);
     

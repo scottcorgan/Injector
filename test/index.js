@@ -1,6 +1,6 @@
 "use strict";
 
-var Injector = require('./injector');
+var Injector = require('../injector');
 var path = require('path');
 
 // Set up our application

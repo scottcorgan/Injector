@@ -9,7 +9,7 @@ var walk = require('walk'),
 // Constants
 
 var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m,
-    MODULE_FINDER_EXP = /\s?function\s?[(](\s?app\s?)[)]/g,
+    MODULE_FINDER_EXP = /\s?function\s?injector\s?[(]\s?app\s?[)]/,
     NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
 
 /**

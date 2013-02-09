@@ -14,6 +14,8 @@ npm install injector
 
 ### Setup
 
+This is where the application is set up (or bootstrapped). It is most likely going to exist before any kind of server or database connection.
+
 ```javascript
 
 // Require modules
@@ -38,8 +40,12 @@ var app = Injector.create('OurApplication', {
 
 ### A Basic Module
 
+All module files must start with a basic Nodejs ` module.exports ` and be housed within a ` funciton (app) {} `. The ` app ` variable is our injector object. From this, we can register our modules.
+
 ```javascript
 module.exports = function (app) {
+    
+    // Some basic private stuff here ...
     
     // Declare our module here
     

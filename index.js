@@ -1,15 +1,16 @@
 "use strict";
 
-// Get injector
-
 var Inject = require('./inject');
+var path = require('path');
 
 // Set up our application
 
-Inject.create('Sevenly', {
-    include: ['modules'],
-    exclude: ['models']
+var app = Inject.create('Sevenly', {
+    directory: path.join(__dirname, 'modules'),
+    exclude: ['modules/models']
 });
+
+
 
 
 

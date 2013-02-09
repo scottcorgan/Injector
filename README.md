@@ -49,13 +49,40 @@ module.exports = function (app) {
     
     // Declare our module here
     
-    app.module('SomeModule', function () {
+    app.module('SomeModule', function (ModuleToInject) {
+        
         return {
             someApiMethod: function () {
-                //
+                
+                console.log(ModuleToInject.value1);
+                
             }
         }
     });
     
+    // Modules can be functions, objects, or basic values
+    
+    app.module('ModuleToInject', {
+        value1: 'value1',
+        value2: 'value2'
+    });
+    
 };
 ```
+
+## API
+
+There are 2 available API methods for registering a module.
+
+### app.module(Name, Value)
+* **Name:** The name of our module
+* **Value:** The value of our module. This can be a function, an object, or a basic value (string, number, etc.)
+
+#### Example
+```javascript
+
+```
+
+
+
+* ` app.constant('SOME_CONSTANT', ConstantValue); `

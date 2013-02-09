@@ -1,7 +1,10 @@
 {
-    "name": "Inject",
-    "version": "0.1.3",
-    "scripts": {
-        "start": "nodemon index.js"
-    }
+  "name": "Inject",
+  "version": "0.1.3",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "walk": "~2.2.1"
+  }
 }

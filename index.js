@@ -3,14 +3,12 @@
 // Get injector
 
 var Inject = require('./inject');
-var app;
-
 
 // Set up our application
 
-module.exports = app = new Inject('Sevenly', {
-    include: '',
-    exclude: ''
+Inject.create('Sevenly', {
+    include: ['modules'],
+    exclude: ['models']
 });
 
 
@@ -18,11 +16,12 @@ module.exports = app = new Inject('Sevenly', {
 
 
 
-app.constant('PI', 3.14159);
 
-var asdf = app.module('Module1', function (PI) {    
-    
-});
+
+
+
+
+
 
 
 

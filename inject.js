@@ -13,16 +13,17 @@
  
  */
 
+// Node modules
+
+var walk = require('walk'),
+    fs = require('fs'),
+    path = require('path');
 
 // Constants
 
-var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
-var NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
-
-
-var Module = require('./module');
-
-//
+var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m,
+    MODULE_FINDER_EXP = /\s?function\s?[(](\s?app\s?)[)]/g,
+    NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
 
 /**
  * Inject constructor
@@ -32,26 +33,43 @@ var Module = require('./module');
 var Inject = function (injectorName, args) {
     var self = this;
     
-    /*
-        
-        Args are:
-        - directories to walk
-        - directories to ignore
-        
-     */
+    // Set up defaults
     
-    // Walk the directory tree here to find dependencies?
-    
-    
+    this.includeFolders = args.include;
+    this.excludeFolders = args.exclude;
     
     // Modules
     
     this.modules = {};
     
-    //
+    // Find all of our modules
     
-    process.nextTick(function () {
-        self.init();
+    // Set up the directory/file walker
+
+    this.walker = walk.walk('./modules', {
+        followLinks: false
+    });
+    
+    this.walker.on('file', function (root, fileStats, next) {
+        var fileName = path.join(__dirname, root, fileStats.name);  
+        var moduleFile = require(fileName);
+        
+        // Test for injection request
+        
+        if(typeof moduleFile === 'function') {
+            var parsedFunction = moduleFile.toString();
+            if (parsedFunction.match(MODULE_FINDER_EXP)) {
+                
+                // Add the modules if it's an injectable set
+                
+                moduleFile(self);
+            }
+        }
+        
+        next();
+    });
+    this. walker.on('end', function () {
+        self.bootstrap();
     });
 };
 
@@ -144,7 +162,7 @@ Inject.prototype.resolveDependencies = function (moduleDeps) {
 };
 
 
-Inject.prototype.bootstrap = function (module, deps) {
+Inject.prototype.parse = function (module, deps) {
     var self = this;
     
     // Module is not a function
@@ -164,7 +182,7 @@ Inject.prototype.bootstrap = function (module, deps) {
     this.resolveDependencies(module.dependsOn).forEach(function (dep, idx) {
         if (dep === NOT_BOOSTRAPPED) {
             var depName = module.dependsOn[idx];
-            self.bootstrap(self.getModule(depName));
+            self.parse(self.getModule(depName));
         }
     });
     
@@ -176,13 +194,13 @@ Inject.prototype.bootstrap = function (module, deps) {
 };
 
 
-Inject.prototype.init = function () {
+Inject.prototype.bootstrap = function () {
     var self = this    
     
     // Bootstrap each module once
     
     Object.keys(this.modules).forEach(function (moduleName, idx, allModuleNames) {
-        self.bootstrap(self.getModule(moduleName));
+        self.parse(self.getModule(moduleName));
     });
 };
 
@@ -230,6 +248,21 @@ Inject.prototype.module = function (name, logic) {
     //
     
     return module;
+};
+
+/**
+ * Instantiants Inject with unlimited arguments
+ * @return {Object}
+ */
+Inject.create = function () {
+    var args = Array.prototype.slice.call(arguments);
+    
+    function I() {
+        return Inject.apply(this, args);
+    }
+    I.prototype = Inject.prototype;
+    
+    return new I();
 };
 
 

@@ -1,5 +1,5 @@
 {
-  "name": "inject",
+  "name": "injector",
   "version": "0.1.6",
   "description": "Basic dependency injection for Nodejs.",
   "dependencies": {

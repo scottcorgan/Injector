@@ -1,0 +1,99 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish', '.' ]
+2 info using npm@1.1.69
+3 info using node@v0.8.16
+4 verbose publish [ '.' ]
+5 verbose read json /Users/scottcorgan/Projects/nodejs/inject/package.json
+6 verbose cache add [ '.', null ]
+7 silly cache add name=undefined spec="." args=[".",null]
+8 verbose parsed url { pathname: '.', path: '.', href: '.' }
+9 silly lockFile 3a52ce78- .
+10 verbose lock . /Users/scottcorgan/.npm/3a52ce78-.lock
+11 verbose read json package.json
+12 verbose tar pack [ '/var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/tmp.tgz',
+12 verbose tar pack   '.' ]
+13 verbose tarball /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/tmp.tgz
+14 verbose folder .
+15 info prepublish Inject@0.1.6
+16 silly lockFile 69599eea-40198-0-8685253001749516-tmp-tgz /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/tmp.tgz
+17 verbose lock /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/tmp.tgz /Users/scottcorgan/.npm/69599eea-40198-0-8685253001749516-tmp-tgz.lock
+18 silly lockFile 69599eea-40198-0-8685253001749516-tmp-tgz /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/tmp.tgz
+19 verbose tar unpack /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/tmp.tgz
+20 silly lockFile bc56015b-40198-0-8685253001749516-package /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/package
+21 verbose lock /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/package /Users/scottcorgan/.npm/bc56015b-40198-0-8685253001749516-package.lock
+22 silly gunzTarPerm modes [ '755', '644' ]
+23 silly gunzTarPerm extractEntry package.json
+24 silly gunzTarPerm extractEntry README.md
+25 silly gunzTarPerm extractEntry index.js
+26 silly gunzTarPerm extractEntry inject.js
+27 silly gunzTarPerm extractEntry modules/module1.js
+28 silly gunzTarPerm extractEntry modules/models/model1.js
+29 verbose read json /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/package/package.json
+30 silly lockFile bc56015b-40198-0-8685253001749516-package /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/package
+31 verbose from cache /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/package/package.json
+32 verbose tar pack [ '/Users/scottcorgan/.npm/Inject/0.1.6/package.tgz',
+32 verbose tar pack   '/var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/package' ]
+33 verbose tarball /Users/scottcorgan/.npm/Inject/0.1.6/package.tgz
+34 verbose folder /var/folders/k9/29gcmj2d10j44khjt4phcfr80000gn/T/npm-68975/1360372240198-0.8685253001749516/package
+35 silly lockFile cac54556-gan-npm-Inject-0-1-6-package-tgz /Users/scottcorgan/.npm/Inject/0.1.6/package.tgz
+36 verbose lock /Users/scottcorgan/.npm/Inject/0.1.6/package.tgz /Users/scottcorgan/.npm/cac54556-gan-npm-Inject-0-1-6-package-tgz.lock
+37 silly lockFile cac54556-gan-npm-Inject-0-1-6-package-tgz /Users/scottcorgan/.npm/Inject/0.1.6/package.tgz
+38 silly lockFile 3bb94008-tcorgan-npm-Inject-0-1-6-package /Users/scottcorgan/.npm/Inject/0.1.6/package
+39 verbose lock /Users/scottcorgan/.npm/Inject/0.1.6/package /Users/scottcorgan/.npm/3bb94008-tcorgan-npm-Inject-0-1-6-package.lock
+40 silly lockFile 3bb94008-tcorgan-npm-Inject-0-1-6-package /Users/scottcorgan/.npm/Inject/0.1.6/package
+41 verbose tar unpack /Users/scottcorgan/.npm/Inject/0.1.6/package.tgz
+42 silly lockFile 3bb94008-tcorgan-npm-Inject-0-1-6-package /Users/scottcorgan/.npm/Inject/0.1.6/package
+43 verbose lock /Users/scottcorgan/.npm/Inject/0.1.6/package /Users/scottcorgan/.npm/3bb94008-tcorgan-npm-Inject-0-1-6-package.lock
+44 silly gunzTarPerm modes [ '755', '644' ]
+45 silly gunzTarPerm extractEntry package.json
+46 silly gunzTarPerm extractEntry README.md
+47 silly gunzTarPerm extractEntry index.js
+48 silly gunzTarPerm extractEntry inject.js
+49 silly gunzTarPerm extractEntry modules/module1.js
+50 silly gunzTarPerm extractEntry modules/models/model1.js
+51 verbose read json /Users/scottcorgan/.npm/Inject/0.1.6/package/package.json
+52 silly lockFile 3bb94008-tcorgan-npm-Inject-0-1-6-package /Users/scottcorgan/.npm/Inject/0.1.6/package
+53 silly shasum updated bytes 2454
+54 info shasum fe3bb06283f2be4814e968193c6d327b630f5acd
+54 info shasum /Users/scottcorgan/.npm/Inject/0.1.6/package.tgz
+55 verbose from cache /Users/scottcorgan/.npm/Inject/0.1.6/package/package.json
+56 verbose chmod /Users/scottcorgan/.npm/Inject/0.1.6/package.tgz 644
+57 verbose chown /Users/scottcorgan/.npm/Inject/0.1.6/package.tgz [ 501, 20 ]
+58 silly lockFile 3a52ce78- .
+59 silly publish { name: 'Inject',
+59 silly publish   version: '0.1.6',
+59 silly publish   scripts: { start: 'nodemon index.js' },
+59 silly publish   dependencies: { walk: '~2.2.1' },
+59 silly publish   readme: 'Inject.js\n',
+59 silly publish   readmeFilename: 'README.md',
+59 silly publish   _id: 'Inject@0.1.6',
+59 silly publish   description: 'Inject.js',
+59 silly publish   dist: { shasum: 'fe3bb06283f2be4814e968193c6d327b630f5acd' } }
+60 verbose url raw Inject
+61 verbose url resolving [ 'https://registry.npmjs.org/', './Inject' ]
+62 verbose url resolved https://registry.npmjs.org/Inject
+63 info trying registry request attempt 1 at 17:10:41
+64 http PUT https://registry.npmjs.org/Inject
+65 http 403 https://registry.npmjs.org/Inject
+66 error publish Failed PUT response 403
+67 error Error: forbidden New packages must have all-lowercase names: Inject
+67 error     at RegClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:259:14)
+67 error     at Request.init.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/main.js:120:22)
+67 error     at Request.EventEmitter.emit (events.js:99:17)
+67 error     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/main.js:648:16)
+67 error     at Request.EventEmitter.emit (events.js:126:20)
+67 error     at IncomingMessage.Request.start.self.req.self.httpModule.request.buffer (/usr/local/lib/node_modules/npm/node_modules/request/main.js:610:14)
+67 error     at IncomingMessage.EventEmitter.emit (events.js:126:20)
+67 error     at IncomingMessage._emitEnd (http.js:366:10)
+67 error     at HTTPParser.parserOnMessageComplete [as onMessageComplete] (http.js:149:23)
+67 error     at CleartextStream.socketOnData [as ondata] (http.js:1367:20)
+68 error If you need help, you may report this log at:
+68 error     <http://github.com/isaacs/npm/issues>
+68 error or email it to:
+68 error     <npm-@googlegroups.com>
+69 error System Darwin 12.2.0
+70 error command "node" "/usr/local/bin/npm" "publish" "."
+71 error cwd /Users/scottcorgan/Projects/nodejs/inject
+72 error node -v v0.8.16
+73 error npm -v 1.1.69
+74 verbose exit [ 1, true ]

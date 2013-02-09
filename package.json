@@ -1,9 +1,7 @@
 {
-  "name": "Inject",
+  "name": "inject",
   "version": "0.1.6",
-  "scripts": {
-    "start": "nodemon index.js"
-  },
+  "description": "Basic dependency injection for Nodejs.",
   "dependencies": {
     "walk": "~2.2.1"
   }

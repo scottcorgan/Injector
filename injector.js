@@ -121,7 +121,7 @@ Injector.prototype.register = function (args) {
     // Test for duplications
     
     if (args.name in this.modules) {
-        throw new Error(_errMsg);
+        throw new Error('Tried to overwrite "' + args.name + '". ' + _errMsg);
     }
     
     // Add item to collection

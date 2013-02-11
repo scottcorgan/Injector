@@ -6,8 +6,8 @@ var path = require('path');
 // Set up our application
 
 var app = Injector.create('Sevenly', {
-    directory: path.join(__dirname, 'modules'),
-    exclude: ['modules/models']
+    directory: path.join(__dirname, 'modules')
+    // exclude: ['modules/models']
 });
 
 

@@ -31,7 +31,11 @@ var Injector = function (injectorName, args) {
     // Find all of our modules by walking the dirctories recursively
     
     // Set up the directory/file walker
-    // 
+    
+    if (this.modulesDirectory.indexOf('node_modules') > -1) {
+        throw new Error('Cannot put Injector modules in the node_modules directory.');
+    }
+     
     this.walker = walk.walk(this.modulesDirectory, {
         followLinks: false
     });

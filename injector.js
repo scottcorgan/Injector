@@ -50,22 +50,19 @@ var Injector = function (injectorName, args) {
         }
         
         var fileName = path.join(root, fileStats.name);
-        
         // Read file as string and match against injector
         
         fs.readFile(fileName, 'utf8', function (err, file) {
             if (file.match(MODULE_FINDER_EXP)) {
-                
                 // Add the modules if it's an injectable set
                 
                 require(fileName)(self);
             }
-            return;
+            
+            // Move onto next file
+            
+            next();
         });
-        
-        // Move onto next file
-        
-        next();
     });
     
     // Bootstrap application when done getting all the modules
@@ -200,6 +197,7 @@ Injector.prototype.parse = function (module, deps) {
     var deps = this.resolveDependencies(module.dependsOn);
     
     // Set our module as bootstrapped
+    
     module.bootstrapped = module.val.apply(module, deps);
     return module
 };

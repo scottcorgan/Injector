@@ -68,7 +68,9 @@ var Injector = function (injectorName, args) {
     // Bootstrap application when done getting all the modules
     
     this.walker.on('end', function () {
-        self.bootstrap();
+        self.bootstrap(function (modules) {
+            console.log(modules);
+        });
         
         // Emit event here that let's people know application was bootstrapped/loaded
         
@@ -205,14 +207,19 @@ Injector.prototype.parse = function (module, deps) {
 /**
  * Start the injection and init the modules
  */
-Injector.prototype.bootstrap = function () {
-    var self = this    
+Injector.prototype.bootstrap = function (callback) {
+    var self = this;
+    var _callback = callback || function () {};
     
     // Bootstrap each module once
     
     Object.keys(this.modules).forEach(function (moduleName) {
         self.parse(self.getModule(moduleName));
     });
+    
+    // All done
+
+    _callback(this.modules);
 };
 
 
@@ -223,16 +230,37 @@ Injector.prototype.bootstrap = function () {
  * @return {Object?}
  */
 Injector.prototype.constant = function (name, val) {
+    var self = this;
+    var errMsg = 'Cannot have two constants with the same name.';
     
-    var constant = this.register({
+    // Set of constants
+    
+    if (typeof name === 'object' && !name.length) {
+        return Object.keys(name).forEach(function (constant) {
+            var name = constant
+            var val = name[constant];
+            
+            // register the module
+            
+            self.register({
+                name: name,
+                val: val,
+                errMsg: errMsg
+            });
+        });
+    }
+    
+    // Only a single defined constant
+    
+    this.register({
         name: name,
         val: val,
-        errMsg: 'Cannot have two constants with the same name.'
+        errMsg: errMsg
     });
     
     //
     
-    return constant;
+    return this;
 };
 
 /**
@@ -258,7 +286,7 @@ Injector.prototype.module = function (name, logic) {
     
     //
     
-    return module;
+    return this;
 };
 
 /**

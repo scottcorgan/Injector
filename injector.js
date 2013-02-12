@@ -5,6 +5,7 @@
 var walk = require('walk');
 var fs = require('fs');
 var path = require('path');
+var async = require('async');
 
 // Constants
 
@@ -51,51 +52,60 @@ Injector.isModuleFile = function (fileStr) {
  */
 Injector.prototype.collectModules = function (callback) {
     var self = this;
+    var modulesDirectory = this.modulesDirectory;
     
-    this.walker = walk.walk(this.modulesDirectory, {
-        followLinks: false
-    });
+    // Get modules from each director
     
-    this.walker.on('file', function (root, fileStats, next) {
+    async.map(modulesDirectory, function (directory, moduleCB) {
         
-        // Only init javascript files we don't exclude
+        // Set up our directory walker
         
-        var fileNameArr = fileStats.name.split('.');
-        if (self.excludeFolders.indexOf(root) > -1 || fileNameArr[fileNameArr.length-1] !== 'js') {
-            return next();
-        }
-        
-        var fileName = path.join(root, fileStats.name);
-        
-        // Read file as string and match against injector
-        
-        fs.readFile(fileName, 'utf8', function (err, file) {
-            if (Injector.isModuleFile(file)) {
-                
-                // Add the modules if it's an injectable set
-                
-                var modules = require(fileName);
-                
-                // register the module in our object
-                
-                Object.keys(modules).forEach(function (moduleName) {
-                    var module = modules[moduleName];
-                    self.module(moduleName, module);
-                });
-            }
-            
-            // Move onto next file
-            
-            next();
+        var walker = walk.walk(directory, {
+            followLinks: false
         });
         
-    });
-    
-    // Bootstrap application when done getting all the modules
-    
-    this.walker.on('end', function () {
-        callback(self.modules);      
-    });
+        // Event for each file in the directories
+        
+        walker.on('file', function (root, fileStats, next) {
+        
+            // Only init javascript files we don't exclude
+            
+            var fileNameArr = fileStats.name.split('.');
+            if (self.excludeFolders.indexOf(root) > -1 || fileNameArr[fileNameArr.length-1] !== 'js') {
+                return next();
+            }
+            
+            var fileName = path.join(root, fileStats.name);
+            
+            // Read file as string and match against injector
+            
+            fs.readFile(fileName, 'utf8', function (err, file) {
+                if (Injector.isModuleFile(file)) {
+                    
+                    // Add the modules if it's an injectable set
+                    
+                    var modules = require(fileName);
+                    
+                    // Register the module in our object then move onto next file
+                    
+                    async.each(Object.keys(modules), function (moduleName, cb) {
+                        var module = modules[moduleName];
+                        self.module(moduleName, module);
+                        cb(null);
+                    }, next);
+                }
+            });
+            
+        });
+        
+        // All done getting modules
+        
+        walker.on('end', function () {
+            moduleCB(null, self.modules);      
+        });
+        
+        
+    }, callback);
 };
 
 /**
@@ -245,13 +255,12 @@ Injector.prototype.bootstrap = function (callback) {
         
         // Bootstrap each module once
     
-        Object.keys(self.modules).forEach(function (moduleName) {
+        async.each(Object.keys(self.modules), function (moduleName, cb) {
             self.parse(self.getModule(moduleName));
+            cb();
+        }, function (err) {
+            _callback(null, self.modules);
         });
-        
-        // All done
-
-        _callback(null, self.modules);
     });
     
     

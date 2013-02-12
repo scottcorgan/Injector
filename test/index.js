@@ -8,7 +8,10 @@ var path = require('path');
 // #1 option to start app
 
 Injector.create('Sevenly', {
-    directory: path.join(__dirname, 'modules')
+    directory: [
+        path.join(__dirname, 'modules'),
+        path.join(__dirname, 'testing')
+    ]
     // exclude: ['modules/models']
 }, function (err, modules) {
     console.log('Injector application started.');

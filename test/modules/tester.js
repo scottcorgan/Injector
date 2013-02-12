@@ -6,7 +6,7 @@ exports.constants = {
 };
 
 exports.server = function (ASDF) {
-
+    return ASDF;
 };
 
 exports.ASDF = 'asdf';

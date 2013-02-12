@@ -4,6 +4,7 @@
   "main": "injector.js",
   "description": "Basic dependency injection for Nodejs.",
   "dependencies": {
-    "walk": "~2.2.1"
+    "walk": "~2.2.1",
+    "async": "~0.2.5"
   }
 }

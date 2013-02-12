@@ -33,7 +33,10 @@ var app = Injector.create('OurApplication', {
     
     // This is the directory where are modules will live
   
-    directory: path.join(__dirname, 'modules'), // this would be ./modules
+    include: [
+        path.join(__dirname, 'modules'), // this would be ./modules
+        path.join(__dirname, 'testing') // this would be ./testing
+    ],
     
     // This is an array of all directories to ignore
     
@@ -56,9 +59,12 @@ var path = require('path');
 
 var app = new Injector('OurApplication', {
     
-    // This is the directory where are modules will live
+    // These are the directories where are modules will live
   
-    directory: path.join(__dirname, 'modules'), // this would be ./modules
+    directory: [
+        path.join(__dirname, 'modules'), // this would be ./modules
+        path.join(__dirname, 'testing') // this would be ./testing
+    ],
     
     // This is an array of all directories to ignore
     

@@ -68,9 +68,7 @@ var Injector = function (injectorName, args) {
     // Bootstrap application when done getting all the modules
     
     this.walker.on('end', function () {
-        self.bootstrap(function (modules) {
-            console.log(modules);
-        });
+        self.bootstrap();
         
         // Emit event here that let's people know application was bootstrapped/loaded
         
@@ -151,6 +149,13 @@ Injector.imaginaryDependency = function () {
  * @return {Array}
  */
 Injector.prototype.resolveDependencies = function (moduleDeps) {
+    
+    // Return no dependencies if the module is undefined
+    
+    if (!moduleDeps) {
+        return [];
+    }
+    
     var self = this;
     
     // Resolve dependency logic
@@ -229,34 +234,36 @@ Injector.prototype.bootstrap = function (callback) {
  * @param  {String} val  
  * @return {Object?}
  */
-Injector.prototype.constant = function (name, val) {
+Injector.prototype.constant = function (key, val) {
     var self = this;
     var errMsg = 'Cannot have two constants with the same name.';
     
-    // Set of constants
+    // Set of constants. Need to loop through and register
     
-    if (typeof name === 'object' && !name.length) {
-        return Object.keys(name).forEach(function (constant) {
-            var name = constant
-            var val = name[constant];
+    if (typeof key === 'object' && !key.length) {
+        Object.keys(key).forEach(function (constant) {
+            var _name = constant
+            var _val = key[constant];
             
             // register the module
             
             self.register({
-                name: name,
-                val: val,
+                name: _name,
+                val: _val,
                 errMsg: errMsg
             });
         });
     }
-    
-    // Only a single defined constant
-    
-    this.register({
-        name: name,
-        val: val,
-        errMsg: errMsg
-    });
+    else{
+        
+        // Only a single defined constant
+        
+        self.register({
+            name: key,
+            val: val,
+            errMsg: errMsg
+        });
+    }
     
     //
     

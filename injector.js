@@ -302,13 +302,28 @@ Injector.prototype.module = function (name, logic) {
  */
 Injector.create = function () {
     var args = Array.prototype.slice.call(arguments);
+    var callback = function () {};
+    
+    // Did we get a callback?
+    
+    if (typeof args[args.length-1] === 'function') {
+        callback = args.pop();
+    }
+    
+    // Set up prototype stuff
     
     function I() {
         return Injector.apply(this, args);
     }
     I.prototype = Injector.prototype;
     
-    return new I();
+    // Instantiate class
+    
+    var injector = new I();
+    
+    // All done
+    
+    callback(injector);
 };
 
 

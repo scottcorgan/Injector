@@ -2,15 +2,15 @@
 
 // Node modules
 
-var walk = require('walk'),
-    fs = require('fs'),
-    path = require('path');
+var walk = require('walk');
+var fs = require('fs');
+var path = require('path');
 
 // Constants
 
-var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m,
-    MODULE_FINDER_EXP = /^\s*module.exports\s?=\s?function\s?injector\s?[(]\s?app\s?[)]/,
-    NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
+var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
+var IS_MODULE_EXP = /^\/\/\s*inject\s*/i;
+var NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
 
 /**
  * Injector constructor
@@ -29,7 +29,6 @@ var Injector = function (injectorName, args) {
     this.modules = {};
     
     // Find all of our modules by walking the dirctories recursively
-    
     // Set up the directory/file walker
     
     if (this.modulesDirectory.indexOf('node_modules') > -1) {
@@ -37,6 +36,14 @@ var Injector = function (injectorName, args) {
     }
 };
 
+/**
+ * Is this module an injectable module
+ * @param  {String}  fileStr 
+ * @return {Boolean}
+ */
+Injector.isModuleFile = function (fileStr) {
+    return fileStr.match(IS_MODULE_EXP)
+};
 
 /**
  * Walk through the directory and collect all declared modules
@@ -59,25 +66,35 @@ Injector.prototype.collectModules = function (callback) {
         }
         
         var fileName = path.join(root, fileStats.name);
+        
         // Read file as string and match against injector
         
         fs.readFile(fileName, 'utf8', function (err, file) {
-            if (file.match(MODULE_FINDER_EXP)) {
+            if (Injector.isModuleFile(file)) {
+                
                 // Add the modules if it's an injectable set
                 
-                require(fileName)(self);
+                var modules = require(fileName);
+                
+                // register the module in our object
+                
+                Object.keys(modules).forEach(function (moduleName) {
+                    var module = modules[moduleName];
+                    self.module(moduleName, module);
+                });
             }
             
             // Move onto next file
             
             next();
         });
+        
     });
     
     // Bootstrap application when done getting all the modules
     
     this.walker.on('end', function () {
-        callback();        
+        callback(self.modules);      
     });
 };
 
@@ -211,7 +228,7 @@ Injector.prototype.parse = function (module, deps) {
     
     // Set our module as bootstrapped
     
-    module.bootstrapped = module.val.apply(module, deps);
+    module.bootstrapped = module.val.apply(self, deps);
     return module
 };
 
@@ -224,7 +241,7 @@ Injector.prototype.bootstrap = function (callback) {
     
     // Collect all our modules before we bootstrap them
     
-    this.collectModules(function () {
+    this.collectModules(function (modules) {
         
         // Bootstrap each module once
     
@@ -234,7 +251,7 @@ Injector.prototype.bootstrap = function (callback) {
         
         // All done
 
-        _callback(self.modules);
+        _callback(null, self.modules);
     });
     
     
@@ -336,8 +353,8 @@ Injector.create = function () {
     
     // All done. Set up modules
     
-    injector.bootstrap(function (modules) {
-        callback(modules);
+    injector.bootstrap(function (err, modules) {
+        callback(err, modules);
     });
 };
 

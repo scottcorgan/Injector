@@ -35,7 +35,16 @@ var Injector = function (injectorName, args) {
     if (this.modulesDirectory.indexOf('node_modules') > -1) {
         throw new Error('Cannot put Injector modules in the node_modules directory.');
     }
-     
+};
+
+
+/**
+ * Walk through the directory and collect all declared modules
+ * @param  {Function} callback 
+ */
+Injector.prototype.collectModules = function (callback) {
+    var self = this;
+    
     this.walker = walk.walk(this.modulesDirectory, {
         followLinks: false
     });
@@ -68,10 +77,7 @@ var Injector = function (injectorName, args) {
     // Bootstrap application when done getting all the modules
     
     this.walker.on('end', function () {
-        self.bootstrap();
-        
-        // Emit event here that let's people know application was bootstrapped/loaded
-        
+        callback();        
     });
 };
 
@@ -216,15 +222,22 @@ Injector.prototype.bootstrap = function (callback) {
     var self = this;
     var _callback = callback || function () {};
     
-    // Bootstrap each module once
+    // Collect all our modules before we bootstrap them
     
-    Object.keys(this.modules).forEach(function (moduleName) {
-        self.parse(self.getModule(moduleName));
+    this.collectModules(function () {
+        
+        // Bootstrap each module once
+    
+        Object.keys(self.modules).forEach(function (moduleName) {
+            self.parse(self.getModule(moduleName));
+        });
+        
+        // All done
+
+        _callback(self.modules);
     });
     
-    // All done
-
-    _callback(this.modules);
+    
 };
 
 
@@ -321,9 +334,11 @@ Injector.create = function () {
     
     var injector = new I();
     
-    // All done
+    // All done. Set up modules
     
-    callback(injector);
+    injector.bootstrap(function (modules) {
+        callback(modules);
+    });
 };
 
 

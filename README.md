@@ -18,6 +18,8 @@ npm install injector
 
 This is where the application is set up (or bootstrapped). It is most likely going to exist before any kind of server or database connection.
 
+#####Option 1#####
+
 ```javascript
 
 // Require modules
@@ -36,87 +38,80 @@ var app = Injector.create('OurApplication', {
     // This is an array of all directories to ignore
     
     exclude: ['modules/models'] // this would be ./modules/models
+}, function (err, modules) {
+    // Callback code goes here
 });
 ```
 
-
-### A Basic Module
-
-All module files must start with a basic Nodejs ` module.exports ` and be housed within a ` function injector (app) {} `. The ` app ` variable is our injector object. From this, we can register our modules. A module export wil have no more and no less than the one argument ` app `.
-
-A module in a module file will only be bootstrapped if in the folder specified in the ` directory: ` value *(See [Setup](https://github.com/scottcorgan/Injector/blob/master/README.md#setup))*.
+#####Option 2 #####
 
 ```javascript
-module.exports = function injector (app) {
-    
-    // Some basic private stuff here ...
-    
-    // Declare our module here
-    
-    app.module('SomeModule', function (ModuleToInject) {
-        
-        return {
-            someApiMethod: function () {
-                
-                console.log(ModuleToInject.value1);
-                
-            }
-        }
-    });
-    
-    // Modules can be functions, objects, or basic values
-    
-    app.module('ModuleToInject', {
-        value1: 'value1',
-        value2: 'value2'
-    });
-    
-};
-```
 
-## API
+// Require modules
 
-There are 2 available API methods for registering a module.
+var Injector = require('injector');
+var path = require('path');
 
-### module(Name, Value)
-* **Name:** The name of our module
-* **Value:** The value of our module. This can be a function, an object, or a basic value (string, number, etc.)
+// Set up our application
 
-##### Example
-```javascript
-
-// Function module defintion
-
-app.module('SomeModule', function () {
-    // Do stuff here ...
+var app = new Injector('OurApplication', {
+    
+    // This is the directory where are modules will live
+  
+    directory: path.join(__dirname, 'modules'), // this would be ./modules
+    
+    // This is an array of all directories to ignore
+    
+    exclude: ['modules/models'] // this would be ./modules/models
 });
 
-// Object module definition
+// Bootstrap our application
 
-app.module('SomeObjectModule', {
-    value1: 'value1'
-    // etc.
+app.bootstrap(function (err, modules) {
+    // Callback code goes here
 });
-
-// Value module definition
-
-app.module('SomeValueModule', 'This sentence is useless ... maybe.');
 
 ```
 
 * * *
 
-### constant(Name, Value)
-* **Name:** The name of our constant
-* **Value:** The value of our constant. This can be a function, an object, or a basic value (string, number, etc.), **BUT** constants cannot receive injected dependencies.
+### A Module
 
-Constants are basically simplified modules. The reason this is in the API is for readability. ` app.constant ` is only a modified wrapper on top of ` app.module `.
+To declare an injectable module, the file must start with `// inject`. This is how the file is declared injectable.
 
-##### Example
+Anything following that should be declared with the Nodejs convention `exports.SomeModuleName = function () {}`.
+
+A module may be declared as a **String, Object, Array, or Function** (see below).
+
+A module in a module file will only be bootstrapped if in the folder specified in the ` directory: ` value *(See [Setup](https://github.com/scottcorgan/Injector/blob/master/README.md#setup))*.
+
 ```javascript
 
-// Basic constant difinition
+// inject
 
-app.constant(PI, 3.14159);
+// Function with dependency
+
+exports.SomeModule = function (SomeDependency) {
+    
+    // Module logic goes here
+    // Return anything you want public facing
+};
+
+exports.SomeDependency = function () {
+    return 'Yo!';
+}
+
+// Object
+
+exports.AnyName = {
+    someKey: 'some value'
+};
+
+// String
+
+exports.SOME_CONSTANT = 'some value';
+
+// etc.
+
 
 ```

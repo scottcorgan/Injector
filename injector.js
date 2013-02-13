@@ -20,10 +20,11 @@ var NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
  */
 var Injector = function (injectorName, args) {
     var self = this;
+    var _args = args || {};
     
     // Set up defaults
-    this.modulesDirectory = args.directory || '/';
-    this.excludeFolders = args.exclude || [];
+    this.modulesDirectory = _args.directory || ['./'];
+    this.excludeFolders = _args.exclude || [];
     
     // Modules
     

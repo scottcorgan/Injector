@@ -119,7 +119,7 @@ Injector.prototype.getModule = function (moduleName) {
 };
 
 /**
- * Process the module
+ * Process the module arguments
  * @param  {Object} module
  * @return {Array} args
  */
@@ -132,6 +132,8 @@ Injector.processArgs = function (module) {
     if(deps[0] === ''){
         return [];
     }
+    
+    
     
     // Trim the strings in the dependency array return
     

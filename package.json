@@ -1,13 +1,15 @@
 {
     "name": "injector",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "main": "injector.js",
     "description": "Basic dependency injection for Nodejs.",
     "dependencies": {
-        "walk": "~2.2.1",
-        "async": "~0.2.5",
-        "chai": "~1.5.0",
-        "mocha": "~1.8.1"
+        "walk": "2.2.x",
+        "async": "0.2.x"
+    },
+    "devDependencies": {
+        "chai": "1.5.x",
+        "mocha": "1.8.x"
     },
     "script": {
         "test": "make test"

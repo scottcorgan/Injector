@@ -212,7 +212,7 @@ Injector.prototype.resolveDependencies = function (moduleDeps) {
  * @param  {Array} deps  
  * @return {Object}
  */
-Injector.prototype.parse = function (module, deps) {
+Injector.prototype.parse = function (module) {
     var self = this;
     
     // Module is not a function
@@ -266,49 +266,6 @@ Injector.prototype.bootstrap = function (callback) {
     });
     
     
-};
-
-
-/**
- * Set up a constant for the app
- * @param  {String} name
- * @param  {String} val  
- * @return {Object?}
- */
-Injector.prototype.constant = function (key, val) {
-    var self = this;
-    var errMsg = 'Cannot have two constants with the same name.';
-    
-    // Set of constants. Need to loop through and register
-    
-    if (typeof key === 'object' && !key.length) {
-        Object.keys(key).forEach(function (constant) {
-            var _name = constant
-            var _val = key[constant];
-            
-            // register the module
-            
-            self.register({
-                name: _name,
-                val: _val,
-                errMsg: errMsg
-            });
-        });
-    }
-    else{
-        
-        // Only a single defined constant
-        
-        self.register({
-            name: key,
-            val: val,
-            errMsg: errMsg
-        });
-    }
-    
-    //
-    
-    return this;
 };
 
 /**

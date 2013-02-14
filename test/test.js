@@ -3,9 +3,13 @@ var path = require('path');
 var assert = require('chai').assert;
 var Injector = require('../injector');
 
-var moduleDir = path.join('modules');
+var moduleDir = path.join(__dirname, 'modules');
+var moduleFile = path.join(__dirname, 'modules', moduleFilename);
 var moduleFilename = 'module1.js';
 var moduleName = 'ModuleName';
+var moduleReturn = 1;
+var objectModuleName = 'ObjectModule';
+var stringModuleName = 'StringModule';
 
 
 suite('Injector instantiation setup', function() {
@@ -65,6 +69,10 @@ suite('Injector instantiation setup', function() {
         done();
     });
     
+    //
+    // need to test that directories get excluded
+    //
+    
 });
 
 suite('Injector static methods', function() {
@@ -102,7 +110,7 @@ suite('Injector static methods', function() {
     
     test('create an instance of Injector', function (done) {        
         Injector.create('TestApp', {
-            directory: [path.join(__dirname, 'modules')]
+            directory: [moduleDir]
         }, function (err, injector) {
             assert.ok(injector instanceof Injector, 'instantiates an instance of Injector');
             done();
@@ -112,14 +120,129 @@ suite('Injector static methods', function() {
     
 });
 
-// Don't need to test this here because it should go in another test
-// assert.isObject(modules, 'created a an object of modules and instantiated Injector');
-// assert.ok(modules[moduleName], 'created module with name ModuleName');
+suite('Injector instance', function() {
+    var injector;
+    
+    setup(function(done){
+        setUpModules();
+        
+        injector = new Injector('TestApp', {
+            directory: [moduleDir]
+        });
+        
+        done();
+    });
 
+    teardown(function(done){
+        tearDownModules();
+        done();
+    });
+
+    test('can bootstrap our set of modules', function(done) {
+        injector.bootstrap(function (err, modules) {
+            assert.isObject(modules, 'creates an object of modules and instantiated Injector')
+            assert.property(modules, moduleName, 'bootstraps all the modules in the directory');
+            done();
+        });
+    });
+    
+    test('collects modules in the specified directory', function(done) {
+        injector.collectModules(function (err, modules) {
+            assert.isArray(modules, 'collects modules into an array');
+            assert.isObject(modules[0], 'collects an array of objects');
+            assert.equal(Object.keys(modules[0])[0], moduleName, 'adds our module to the array of modules');
+            done();
+        });
+    });
+    
+    test('gets a module with a getter', function (done) {
+        injector.bootstrap(function (err, modules) {
+            var module = injector.getModule(moduleName);
+            
+            assert.isObject(module, 'module is an object');
+            assert.equal(module.name, moduleName, 'module has the correct name');
+            done();
+        });
+    });
+    
+    test('registers modules', function (done) {
+        var registerModule = function () {
+            return injector.register({
+                name: moduleName,
+                val: 'module value',
+                dependsOn: []
+            });
+        };
+        
+        var module = registerModule();
+        assert.property(injector.modules, moduleName, 'registered our module on the instance');
+        assert.throw(registerModule, Error, '', 'throws an error when duplicate modules are registered');
+        assert.property(injector.modules[moduleName], 'bootstrapped', 'declares our module to be bootstrapped or not bootstrapped');
+        done();
+    });
+    
+    test('registers a module as an object', function(done) {
+        injector.bootstrap(function (err, modules) {
+            var module = modules[objectModuleName];
+            
+            assert.isObject(module.bootstrapped, 'registers an object module');
+            done();
+        });
+    });
+    
+    test('registers a module as a string or number', function(done) {
+        injector.bootstrap(function (err, modules) {
+            var module = modules[stringModuleName];
+            
+            assert.isString(module.bootstrapped, 'registers a module as a string');
+            done();
+        });
+    });
+    
+    test('resolves dependency of a module', function(done) {
+        injector.bootstrap(function (err, modules) {
+            var deps = injector.resolveDependencies([moduleName]);
+            
+            assert.isArray(deps, 'returns array of bootstrapped values of dependencies');
+            assert.deepEqual(deps, [moduleReturn], 'returns dependency values');
+            done();
+        });
+        
+    });
+    
+    test('returns imaginary dependency when dependency does not exist for module', function(done) {
+        assert.deepEqual(injector.resolveDependencies(['notAModule']), [null], 'null for no module and/or dependency');
+        done();
+    });
+    
+    test('parses our module and bootstraps it', function (done) {
+        var moduleValue = 'module value';
+        var registerModule = function (name, depName) {
+            return injector.register({
+                name: name,
+                val: moduleValue,
+                dependsOn: [depName]
+            });
+        };
+        
+        var module = injector.parse(registerModule(moduleName));
+        assert.equal(module.bootstrapped, moduleValue, 'bootstraps the returning value of our module');
+        done();
+    });
+    
+    test('registers a module with a syntax sugary method', function(done) {
+        injector.module(moduleName, 'val');
+        assert.isDefined(injector.getModule(moduleName), 'registers the module with the helper function');
+        done();
+    });
+    
+});
+
+//
 
 function setUpModules (callback) {
     fs.mkdirSync(path.join(__dirname, 'modules'));
-    fs.writeFileSync(path.join(__dirname, 'modules', moduleFilename), '// inject\n\nexports.' + moduleName + ' = function () {\n\n};', 'utf8');
+    fs.writeFileSync(path.join(__dirname, 'modules', moduleFilename), '// inject\n\nexports.' + moduleName + ' = function () {\nreturn ' + moduleReturn + ';\n};\n\nexports.' + objectModuleName + ' = {prop1: "prop value"};\n\nexports.' + stringModuleName + ' = "string module value"', 'utf8');
 }
 
 function tearDownModules () {

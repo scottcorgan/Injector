@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+
+
+// Run our tests
+var sys = require('sys')
+var exec = require('child_process').exec;
+
+// function puts(error, stdout, stderr) { sys.puts(stdout) }
+exec("make test", function (err, stdout, stderr) {
+    if (stderr) {
+        console.log('\n\nTests failed: ', stderr);
+        console.log('\n\n---------------------------------------------\nBuild failed.');
+        return 
+    }
+    
+    console.log(stdout);
+    updateVersionNumbuer();
+    
+    console.log('\n\n---------------------------------------------\nBuild Succeeded.');
+});
+
+
+
+function updateVersionNumbuer () {
+    
+    // Update version number
+
+    var fs = require('fs');
+    var versionNumber = process.argv[2];
+
+    var packageFile = fs.readFileSync('./package.json', 'utf8');
+    var readme = fs.readFileSync('./README.md', 'utf8');
+
+    readme = readme.replace(/Current Version: \*\*[0-9].[0-9].[0-9]\*\*/, 'Current Version: **' + versionNumber + '**');
+    packageFile = packageFile.replace(/"version": "[0-9].[0-9].[0-9]"/, '"version": "' + versionNumber + '"');
+    fs.writeFileSync('./package.json', packageFile, 'utf8');
+    fs.writeFileSync('./README.md', readme, 'utf8');
+    console.log('\nUpdated version number to ' + versionNumber);
+}

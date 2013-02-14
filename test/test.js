@@ -1,5 +1,11 @@
+var fs = require('fs');
+var path = require('path');
 var assert = require('chai').assert;
 var Injector = require('../injector');
+
+var moduleDir = path.join('modules');
+var moduleFilename = 'module1.js';
+var moduleName = 'ModuleName';
 
 
 suite('Injector instantiation setup', function() {
@@ -63,6 +69,14 @@ suite('Injector instantiation setup', function() {
 
 suite('Injector static methods', function() {
     
+    setup(function(){
+        setUpModules();
+    });
+
+    teardown(function(){
+        tearDownModules();
+    });
+    
     test('show a file flagged as a module file if it is a module file', function (done) {
         var moduleFileBlankStr = '';
         var moduleFileStr = '// inject';
@@ -86,8 +100,30 @@ suite('Injector static methods', function() {
         done();
     });
     
-    test('creates an instance of Injector', function (done) {
-        // Injector.create
-        done();
+    test('create an instance of Injector', function (done) {        
+        Injector.create('TestApp', {
+            directory: [path.join(__dirname, 'modules')]
+        }, function (err, injector) {
+            assert.ok(injector instanceof Injector, 'instantiates an instance of Injector');
+            done();
+        });
     });
+    
+    
 });
+
+// Don't need to test this here because it should go in another test
+// assert.isObject(modules, 'created a an object of modules and instantiated Injector');
+// assert.ok(modules[moduleName], 'created module with name ModuleName');
+
+
+function setUpModules (callback) {
+    fs.mkdirSync(path.join(__dirname, 'modules'));
+    fs.writeFileSync(path.join(__dirname, 'modules', moduleFilename), '// inject\n\nexports.' + moduleName + ' = function () {\n\n};', 'utf8');
+}
+
+function tearDownModules () {
+    fs.unlinkSync(path.join(__dirname, 'modules', moduleFilename));
+    return fs.rmdirSync(path.join(__dirname, 'modules'));
+}
+

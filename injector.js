@@ -56,7 +56,6 @@ Injector.prototype.collectModules = function (callback) {
     var modulesDirectory = this.modulesDirectory;
     
     // Get modules from each director
-    
     async.map(modulesDirectory, function (directory, moduleCB) {
         
         // Set up our directory walker
@@ -68,14 +67,14 @@ Injector.prototype.collectModules = function (callback) {
         // Event for each file in the directories
         
         walker.on('file', function (root, fileStats, next) {
-        
+            
             // Only init javascript files we don't exclude
             
             var fileNameArr = fileStats.name.split('.');
+            
             if (self.excludeFolders.indexOf(root) > -1 || fileNameArr[fileNameArr.length-1] !== 'js') {
                 return next();
             }
-            
             var fileName = path.join(root, fileStats.name);
             
             // Read file as string and match against injector
@@ -366,7 +365,7 @@ Injector.create = function () {
     // All done. Set up modules
     
     injector.bootstrap(function (err, modules) {
-        callback(err, modules);
+        callback(err, injector);
     });
 };
 

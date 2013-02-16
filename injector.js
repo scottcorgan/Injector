@@ -88,12 +88,14 @@ Injector.prototype.collectModules = function (callback) {
                     
                     // Register the module in our object then move onto next file
                     
-                    async.each(Object.keys(modules), function (moduleName, cb) {
+                    return async.each(Object.keys(modules), function (moduleName, cb) {
                         var module = modules[moduleName];
                         self.module(moduleName, module);
                         cb(null);
                     }, next);
                 }
+                
+                next();
             });
             
         });

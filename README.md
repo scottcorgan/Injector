@@ -4,7 +4,7 @@ Basic dependency injection for Nodejs.
 
 And when I say basic, I mean basic. The idea with building this module was to create an open, flexible module system and not enforce new structures and coding styles.
 
-Current Version: **0.2.6**
+Current Version: **0.2.7**
 
 ## Installation
 
@@ -29,19 +29,19 @@ var path = require('path');
 
 // Set up our application
 
-var app = Injector.create('OurApplication', {
+Injector.create('OurApplication', {
     
     // This is the directory where are modules will live
   
-    include: [
+    directory: [
         path.join(__dirname, 'modules'), // this would be ./modules
         path.join(__dirname, 'testing') // this would be ./testing
     ],
     
     // This is an array of all directories to ignore
     
-    exclude: ['modules/models'] // this would be ./modules/models
-}, function (err, modules) {
+    exclude: ['modules/models'] // this would be ./modules/models (OPTIONAL)
+}, function (err, injector) {
     // Callback code goes here
 });
 ```
@@ -68,7 +68,7 @@ var app = new Injector('OurApplication', {
     
     // This is an array of all directories to ignore
     
-    exclude: ['modules/models'] // this would be ./modules/models
+    exclude: ['modules/models'] // this would be ./modules/models (OPTIONAL)
 });
 
 // Bootstrap our application

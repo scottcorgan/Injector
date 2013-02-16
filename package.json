@@ -1,6 +1,6 @@
 {
     "name": "injector",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "main": "injector.js",
     "description": "Basic dependency injection for Nodejs.",
     "dependencies": {
@@ -13,5 +13,9 @@
     },
     "script": {
         "test": "make test"
+    },
+    "repository": {
+        "type" : "git",
+        "url" : "http://github.com/scottcorgan/injector.git"
     }
 }

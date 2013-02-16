@@ -6,6 +6,8 @@ And when I say basic, I mean basic. The idea with building this module was to cr
 
 Current Version: **0.2.7**
 
+[![Build Status](https://travis-ci.org/scottcorgan/Injector.png)](https://travis-ci.org/scottcorgan/Injector)
+
 ## Installation
 
 ```

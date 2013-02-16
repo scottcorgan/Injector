@@ -2,7 +2,7 @@
     "name": "injector",
     "version": "0.2.7",
     "main": "injector.js",
-    "description": "Basic dependency injection for Nodejs.",
+    "description": "Dependency injection for Nodejs.",
     "dependencies": {
         "walk": "2.2.x",
         "async": "0.2.x"

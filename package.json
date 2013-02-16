@@ -1,5 +1,5 @@
 {
-    "name": "injector",
+    "name": "Injector",
     "version": "0.2.8",
     "main": "injector.js",
     "description": "Dependency injection for Nodejs.",

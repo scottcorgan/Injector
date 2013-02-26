@@ -1,10 +1,10 @@
 {
     "name": "injector",
-    "version": "0.2.8",
+    "version": "0.2.9",
     "main": "injector.js",
     "description": "Dependency injection for Nodejs.",
     "dependencies": {
-        "walk": "2.2.x",
+        "walk": "2.x.x",
         "async": "0.2.x"
     },
     "devDependencies": {

@@ -10,8 +10,9 @@ var async = require('async');
 // Constants
 
 var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
-var IS_MODULE_EXP = /^\/\/\s*inject\s*/i;
+var IS_MODULE_EXP = /^\/\/|\#\s*inject\s*/i;
 var NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
+var SUPPORTED_FILE_EXT = ['js', 'coffee'];
 
 /**
  * Injector constructor
@@ -72,7 +73,7 @@ Injector.prototype.collectModules = function (callback) {
             
             var fileNameArr = fileStats.name.split('.');
             
-            if (self.excludeFolders.indexOf(root) > -1 || fileNameArr[fileNameArr.length-1] !== 'js') {
+            if (self.excludeFolders.indexOf(root) > -1 || SUPPORTED_FILE_EXT.indexOf(fileNameArr[fileNameArr.length-1]) < 0) {
                 return next();
             }
             var fileName = path.join(root, fileStats.name);

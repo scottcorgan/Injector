@@ -4,8 +4,8 @@ var assert = require('chai').assert;
 var Injector = require('../injector');
 
 var moduleDir = path.join(__dirname, 'modules');
-var moduleFile = path.join(__dirname, 'modules', moduleFilename);
 var moduleFilename = 'module1.js';
+var moduleFile = path.join(__dirname, 'modules', moduleFilename);
 var moduleName = 'ModuleName';
 var moduleReturn = 1;
 var objectModuleName = 'ObjectModule';

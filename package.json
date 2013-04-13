@@ -1,6 +1,6 @@
 {
   "name": "injector",
-  "version": "0.2.10",
+  "version": "0.3.1",
   "main": "injector.js",
   "description": "Dependency injection for Nodejs.",
   "dependencies": {

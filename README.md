@@ -123,3 +123,9 @@ exports.SOME_CONSTANT = 'some value';
 
 
 ```
+
+## Run tests
+
+```
+npm test
+```

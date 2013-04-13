@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var assert = require('chai').assert;
-var Injector = require('../injector');
+var Injector = require('../index');
 
 var moduleDir = path.join(__dirname, 'modules');
 var moduleFilename = 'module1.js';

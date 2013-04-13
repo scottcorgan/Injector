@@ -1,21 +1,22 @@
 {
-    "name": "injector",
-    "version": "0.2.10",
-    "main": "injector.js",
-    "description": "Dependency injection for Nodejs.",
-    "dependencies": {
-        "walk": "2.x.x",
-        "async": "0.2.x"
-    },
-    "devDependencies": {
-        "chai": "1.5.x",
-        "mocha": "1.8.x"
-    },
-    "scripts": {
-        "test": "make test"
-    },
-    "repository": {
-        "type" : "git",
-        "url" : "http://github.com/scottcorgan/injector.git"
-    }
+  "name": "injector",
+  "version": "0.2.10",
+  "main": "injector.js",
+  "description": "Dependency injection for Nodejs.",
+  "dependencies": {
+    "walk": "2.x.x",
+    "async": "0.2.x",
+    "args-list": "~0.3.0"
+  },
+  "devDependencies": {
+    "chai": "1.5.x",
+    "mocha": "1.8.x"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/scottcorgan/injector.git"
+  }
 }

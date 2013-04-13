@@ -103,6 +103,13 @@ suite('Injector static methods', function() {
         done();
     });
     
+    test('trims whitespace from arguments list', function (done) {
+        var modSpace = function ( spaceArg ) {};
+        
+        assert.deepEqual(Injector.processArgs(modSpace), ['spaceArg'], 'trimmed whitespace in array items');
+        done();
+    });
+    
     test('makes imaginary dependency', function (done) {
         assert.isNull(Injector.imaginaryDependency(), 'imaginary dependency returns null');
         done();
@@ -116,8 +123,6 @@ suite('Injector static methods', function() {
             done();
         });
     });
-    
-    
 });
 
 suite('Injector instance', function() {

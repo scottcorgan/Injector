@@ -6,10 +6,10 @@ var walk = require('walk');
 var fs = require('fs');
 var path = require('path');
 var async = require('async');
+var argsList = require('args-list');
 
 // Constants
 
-var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
 var IS_MODULE_EXP = /^\/\/|\#\s*inject\s*/i;
 var NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
 var SUPPORTED_FILE_EXT = ['js', 'coffee'];
@@ -126,22 +126,7 @@ Injector.prototype.getModule = function (moduleName) {
  * @return {Array} args
  */
 Injector.processArgs = function (module) {
-    var depsStr =  module.toString().match(FN_ARGS),
-        deps = (depsStr) ? depsStr[1].split(',') : [''];
-    
-    // No dependencies, so we return empty array
-    
-    if(deps[0] === ''){
-        return [];
-    }
-    
-    
-    
-    // Trim the strings in the dependency array return
-    
-    return deps.map(function (dep) {
-        return dep.trim();
-    });
+    return argsList(module);
 };
 
 /**

@@ -54,35 +54,40 @@ Anything following that should be declared with the Nodejs convention `exports.S
 
 A module in a module file will only be bootstrapped if in the folder specified in the ` directory: ` value *(See [Setup](https://github.com/scottcorgan/Injector/blob/master/README.md#setup))*.
 
+#### Function
+
 ```javascript
-
 // inject
-
-// Function with dependency
 
 exports.SomeModule = function (SomeDependency) {
     
     // Module logic goes here
     // Return anything you want public facing
+    
+    someDependency(); // outputs 'Yo!'
 };
 
 exports.SomeDependency = function () {
     return 'Yo!';
 }
+```
 
-// Object
+#### Object
+
+```javascript
+// inject
 
 exports.AnyName = {
     someKey: 'some value'
 };
+```
 
-// String
+#### String
+
+```javascript
+// inject
 
 exports.SOME_CONSTANT = 'some value';
-
-// etc.
-
-
 ```
 
 ## Run tests

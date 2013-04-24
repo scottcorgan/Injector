@@ -42,7 +42,7 @@ Injector.create('ApplicationName', config, function (err, injector) {
 
 ## Modules
 
-To declare an injectable module, the file must start with `// inject` (or ` #inject ` for Coffeescript). This is how the file is declared injectable.
+To declare an injectable module, the file must start with `// inject` (or ` # inject ` for Coffeescript). This is how the file is declared injectable.
 
 Anything following that should be declared with the Nodejs convention `exports.SomeModuleName = function () {}`. A module may be declared as a **String, Object, Array, or Function** (see below).
 

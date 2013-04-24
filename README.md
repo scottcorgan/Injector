@@ -14,39 +14,33 @@ Current Version: **0.3.3**
 npm install injector --save
 ```
 
-## Usage
-
-### Setup
+## Setup
 
 This is where the application is set up (or bootstrapped). It is most likely going to exist before any kind of server or database connection.
 
 ```javascript
 
 // Require modules
-
 var Injector = require('injector');
-var path = require('path');
+
+// Injector config
+var config = {
+    directory: [ 'some/module/directory' ],
+    exclude: [ 'some/other/directory' ] // (OPTIONAL)
+};
 
 // Set up our application
-
-Injector.create('OurApplication', {
-    
-    // This is the directory where are modules will live
-  
-    directory: [
-        path.join(__dirname, 'modules'), // this would be ./modules
-        path.join(__dirname, 'testing') // this would be ./testing
-    ],
-    
-    // This is an array of all directories to ignore
-    
-    exclude: ['modules/models'] // this would be ./modules/models (OPTIONAL)
-}, function (err, injector) {
+Injector.create('ApplicationName', config, function (err, injector) {
     // Callback code goes here
 });
 ```
 
-### Modules
+## Configuration
+
+* **directory** - a list of directories to use to look for injector modules
+* **exclude** - (OPTIONAL) a list of directories to ignore when looking for injector modules
+
+## Modules
 
 To declare an injectable module, the file must start with `// inject` (or ` #inject ` for Coffeescript). This is how the file is declared injectable.
 

@@ -4,7 +4,7 @@ Dependency injection for Nodejs.
 
 And when I say basic, I mean basic. The idea with building this module was to create an open, flexible module system and not enforce new structures and coding styles.
 
-Current Version: **0.3.3**
+Current Version: **0.3.4**
 
 [![Build Status](https://travis-ci.org/scottcorgan/Injector.png)](https://travis-ci.org/scottcorgan/Injector)
 

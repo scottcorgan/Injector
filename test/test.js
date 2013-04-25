@@ -98,10 +98,10 @@ suite('Injector static methods', function() {
     
     test('process arguments of a module', function(done) {
         var noArgsModule = 'function () {}';
-        var argsModule = 'function (SomeArg) {}';
+        var argsModule = 'function (SomeArg, AnotherArg) {}';
         
         assert.deepEqual(Injector.processArgs(noArgsModule), [], 'no arguments returns blank array');
-        assert.deepEqual(Injector.processArgs(argsModule), ['SomeArg'], 'parses arguments into array');
+        assert.deepEqual(Injector.processArgs(argsModule), ['SomeArg', 'AnotherArg'], 'parses arguments into array');
         done();
     });
     

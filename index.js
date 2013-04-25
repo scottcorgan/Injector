@@ -6,6 +6,7 @@ var fs = require('fs');
 var path = require('path');
 var async = require('async');
 var argsList = require('args-list');
+var assert = require('assert');
 
 // Constants
 var IS_MODULE_EXP = /^(\/\/\s*|\#\s*|\/\*\s*)inject\s*/i;
@@ -21,6 +22,11 @@ var Injector = function (injectorName, args) {
     var self = this;
     var _args = args || {};
     
+    // Include single directory
+    if (typeof _args.directory === 'string') {
+        _args.directory = [_args.directory];
+    }
+    
     // Set up defaults
     this.modulesDirectory = _args.directory || ['./'];
     this.excludeFolders = _args.exclude || [];
@@ -28,12 +34,10 @@ var Injector = function (injectorName, args) {
     // Modules
     this.modules = {};
     
-    // Find all of our modules by walking the dirctories recursively
-    // Set up the directory/file walker
-    
-    if (this.modulesDirectory.indexOf('node_modules') > -1) {
-        throw new Error('Cannot put Injector modules in the node_modules directory.');
-    }
+    // Error checking
+    assert.notEqual(typeof _args.directory, 'function', 'Directory must be an array or a string');
+    assert.notEqual(typeof this.modulesDirectory.indexOf, 'undefined', 'Directory cannot be an object');
+    assert.equal(this.modulesDirectory.indexOf('node_modules'), -1, 'Cannot put Injector modules in the node_modules directory.');
 };
 
 /**
@@ -55,7 +59,6 @@ Injector.prototype.collectModules = function (callback) {
     
     // Get modules from each director
     async.map(modulesDirectory, function (directory, moduleCB) {
-        
         // Set up our directory walker
         var walker = walk.walk(directory, {
             followLinks: false

@@ -22,13 +22,23 @@ suite('Injector instantiation setup', function() {
         done();
     });
     
-    test('sets the module directories', function(done) {
+    test('sets multiple module directories', function(done) {
         var moduleMultiDir = ['moduleDir1', 'moduleDir2'];
         var injector = new Injector('', {
             directory: moduleMultiDir
         });
         
         assert.equal(injector.modulesDirectory, moduleMultiDir, 'can set multiple module directories');
+        done();
+    });
+    
+    test('sets a single module directory', function (done) {
+        var moduleMultiDir = 'moduleDir1';
+        var injector = new Injector('', {
+            directory: moduleMultiDir
+        });
+        
+        assert.deepEqual(injector.modulesDirectory, [moduleMultiDir], 'can set a single module directory');
         done();
     });
     
@@ -66,6 +76,24 @@ suite('Injector instantiation setup', function() {
         };
         
         assert.throw(inject, Error, 'Cannot put Injector modules in the node_modules directory');
+        done();
+    });
+    
+    test('does not accept a function as a directory', function (done) {
+        var inject = function () {
+            new Injector('AppName', {directory: function () {}});
+        }
+        
+        assert.throw(inject, Error);
+        done();
+    });
+    
+    test('does not accept an object as a directory', function (done) {
+        var inject = function () {
+            new Injector('AppName', {directory: {}});
+        }
+        
+        assert.throw(inject, Error);
         done();
     });
     

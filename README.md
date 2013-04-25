@@ -99,5 +99,7 @@ npm test
 ## Changelog
 
 ### 0.4.0
-* NPM modules in *node_modules* directory are now injectable like a normal Injector module. No need to call ` require('') ` in any module now.
-* Using ` /* inject */ ` now also declares a file has having an injectable module
+* NEW: Npm modules in *node_modules* directory are now injectable like a normal Injector module. No need to call ` require('') ` in any module now.
+* NEW: Using ` /* inject */ ` now also declares a file has having an injectable module
+* NEW: define one OR multiple module directories
+* FIXED: error with invalid directory type (object, function, etc). Only strings or arrays are allowed

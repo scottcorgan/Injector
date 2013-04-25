@@ -1,8 +1,8 @@
 # Injector
 
-Dependency injection for Nodejs.
+Directory-independent dependency injection for Nodejs.
 
-And when I say basic, I mean basic. The idea with building this module was to create an open, flexible module system and not enforce new structures and coding styles.
+The idea behind this module is an open, flexible, directory-independent module system that does not enforce new coding styles foreign to Nodejs.
 
 Current Version: **0.3.5**
 
@@ -42,7 +42,7 @@ Injector.create('ApplicationName', config, function (err, injector) {
 
 ## Modules
 
-To declare an injectable module, the file must start with `// inject` (or ` #inject ` for Coffeescript). This is how the file is declared injectable.
+To declare an injectable module, the file must start with `// inject` (or ` # inject ` for Coffeescript). This is how the file is declared injectable.
 
 Anything following that should be declared with the Nodejs convention `exports.SomeModuleName = function () {}`. A module may be declared as a **String, Object, Array, or Function** (see below).
 

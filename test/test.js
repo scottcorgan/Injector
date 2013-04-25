@@ -88,11 +88,13 @@ suite('Injector static methods', function() {
     test('show a file flagged as a module file if it is a module file', function (done) {
         var moduleFileBlankStr = '';
         var moduleFileStr = '// inject';
+        var moduleFileStrOpt2 = '/* inject */'
         var coffeescriptModuleFileStr = '# inject';
         
         assert.isNull(Injector.isModuleFile(moduleFileBlankStr), 'blank file is not a module file.');
-        assert.isNotNull(Injector.isModuleFile(moduleFileStr), 'file that starts with // inject is module file');
-        assert.isNotNull(Injector.isModuleFile(coffeescriptModuleFileStr), 'coffeescript file that starts with # inject is module file');
+        assert.isNotNull(Injector.isModuleFile(moduleFileStr), 'file that starts with "// inject" is module file');
+        assert.isNotNull(Injector.isModuleFile(moduleFileStrOpt2), 'file that starts with "/* inject */"" is module file');
+        assert.isNotNull(Injector.isModuleFile(coffeescriptModuleFileStr), 'coffeescript file that starts with "# inject is" module file');
         done();
     });
     

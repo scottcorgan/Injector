@@ -8,7 +8,7 @@ var async = require('async');
 var argsList = require('args-list');
 
 // Constants
-var IS_MODULE_EXP = /^\/\/|\#\s*inject\s*/i;
+var IS_MODULE_EXP = /^(\/\/\s*|\#\s*|\/\*\s*)inject\s*/i;
 var NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
 var SUPPORTED_FILE_EXT = ['js', 'coffee'];
 

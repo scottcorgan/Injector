@@ -98,5 +98,6 @@ npm test
 
 ## Changelog
 
-### 0.3.6
+### 0.4.0
 * NPM modules in *node_modules* directory are now injectable like a normal Injector module. No need to call ` require('') ` in any module now.
+* Using ` /* inject */ ` now also declares a file has having an injectable module

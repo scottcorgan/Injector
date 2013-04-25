@@ -8,6 +8,12 @@ Current Version: **0.3.5**
 
 [![Build Status](https://travis-ci.org/scottcorgan/Injector.png)](https://travis-ci.org/scottcorgan/Injector)
 
+## Example
+
+If you need an example to help you get started, I've created a small and easy example of most of the features of Injector.
+
+[View the example of a working injector app](https://github.com/scottcorgan/Injector/tree/master/example)
+
 ## Installation
 
 ```

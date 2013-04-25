@@ -95,3 +95,8 @@ exports.SOME_CONSTANT = 'some value';
 ```
 npm test
 ```
+
+## Changelog
+
+### 0.3.6
+* NPM modules are not injectable like a normal Injector module. No need to call ` require('') ` in any module now.

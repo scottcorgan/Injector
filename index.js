@@ -1,7 +1,6 @@
 "use strict";
 
 // Node modules
-
 var walk = require('walk');
 var fs = require('fs');
 var path = require('path');
@@ -9,7 +8,6 @@ var async = require('async');
 var argsList = require('args-list');
 
 // Constants
-
 var IS_MODULE_EXP = /^\/\/|\#\s*inject\s*/i;
 var NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
 var SUPPORTED_FILE_EXT = ['js', 'coffee'];
@@ -28,7 +26,6 @@ var Injector = function (injectorName, args) {
     this.excludeFolders = _args.exclude || [];
     
     // Modules
-    
     this.modules = {};
     
     // Find all of our modules by walking the dirctories recursively
@@ -60,17 +57,14 @@ Injector.prototype.collectModules = function (callback) {
     async.map(modulesDirectory, function (directory, moduleCB) {
         
         // Set up our directory walker
-        
         var walker = walk.walk(directory, {
             followLinks: false
         });
         
         // Event for each file in the directories
-        
         walker.on('file', function (root, fileStats, next) {
             
             // Only init javascript files we don't exclude
-            
             var fileNameArr = fileStats.name.split('.');
             
             if (self.excludeFolders.indexOf(root) > -1 || SUPPORTED_FILE_EXT.indexOf(fileNameArr[fileNameArr.length-1]) < 0) {
@@ -79,16 +73,13 @@ Injector.prototype.collectModules = function (callback) {
             var fileName = path.join(root, fileStats.name);
             
             // Read file as string and match against injector
-            
             fs.readFile(fileName, 'utf8', function (err, file) {
                 if (Injector.isModuleFile(file)) {
                     
                     // Add the modules if it's an injectable set
-                    
                     var modules = require(fileName);
                     
                     // Register the module in our object then move onto next file
-                    
                     return async.each(Object.keys(modules), function (moduleName, cb) {
                         var module = modules[moduleName];
                         self.module(moduleName, module);
@@ -102,7 +93,6 @@ Injector.prototype.collectModules = function (callback) {
         });
         
         // All done getting modules
-        
         walker.on('end', function () {
             moduleCB(null, self.modules);      
         });
@@ -139,13 +129,11 @@ Injector.prototype.register = function (args) {
     var _errMsg = args.errMsg || 'Cannot have two items with the same name.';
     
     // Test for duplications
-    
     if (args.name in this.modules) {
         throw new Error('Tried to overwrite "' + args.name + '". ' + _errMsg);
     }
     
     // Add item to collection
-    
     this.modules[args.name] = {
         name: args.name,
         val: args.val,
@@ -154,7 +142,6 @@ Injector.prototype.register = function (args) {
     };
     
     // For method chaining
-    
     return this.modules[args.name];
 };
 
@@ -172,9 +159,7 @@ Injector.imaginaryDependency = function () {
  * @return {Array}
  */
 Injector.prototype.resolveDependencies = function (moduleDeps) {
-    
     // Return no dependencies if the module is undefined
-    
     if (!moduleDeps) {
         return [];
     }
@@ -182,14 +167,23 @@ Injector.prototype.resolveDependencies = function (moduleDeps) {
     var self = this;
     
     // Resolve dependency logic
-    
     return moduleDeps.map(function (depName) {
         var module = self.getModule(depName);
         
         if(depName === '' || !module) {
-            return Injector.imaginaryDependency();
+            module = Injector.imaginaryDependency();
+            
+            // Look for module in node_modules folder
+            try{
+                module = require(depName);
+            }
+            catch (e) {}
+            
+            //
+            return module
         }
         
+        //
         return module.bootstrapped;
     });
 };
@@ -204,7 +198,6 @@ Injector.prototype.parse = function (module) {
     var self = this;
     
     // Module is not a function
-    
     if (typeof module.val !== 'function') {
         module.bootstrapped = module.val;
     }
@@ -216,7 +209,6 @@ Injector.prototype.parse = function (module) {
     
     // Resolve null dependencies
     // All deps need to be bootstrapped first
-    
     this.resolveDependencies(module.dependsOn).forEach(function (dep, idx) {
         if (dep === NOT_BOOSTRAPPED) {
             var depName = module.dependsOn[idx];
@@ -240,11 +232,9 @@ Injector.prototype.bootstrap = function (callback) {
     var _callback = callback || function () {};
     
     // Collect all our modules before we bootstrap them
-    
     this.collectModules(function (modules) {
         
         // Bootstrap each module once
-    
         async.each(Object.keys(self.modules), function (moduleName, cb) {
             self.parse(self.getModule(moduleName));
             cb();
@@ -265,11 +255,9 @@ Injector.prototype.bootstrap = function (callback) {
 Injector.prototype.module = function (name, logic) {
     
     // Get our dependencies
-    
     var deps = Injector.processArgs(logic);
     
     // Register the module
-    
     var module = this.register({
         name: name,
         val: logic,
@@ -278,7 +266,6 @@ Injector.prototype.module = function (name, logic) {
     });
     
     //
-    
     return this;
 };
 
@@ -291,24 +278,20 @@ Injector.create = function () {
     var callback = function () {};
     
     // Did we get a callback?
-    
     if (typeof args[args.length-1] === 'function') {
         callback = args.pop();
     }
     
     // Set up prototype stuff
-    
     function I() {
         return Injector.apply(this, args);
     }
     I.prototype = Injector.prototype;
     
     // Instantiate class
-    
     var injector = new I();
     
     // All done. Set up modules
-    
     injector.bootstrap(function (err, modules) {
         callback(err, injector);
     });

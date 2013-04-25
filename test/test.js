@@ -206,6 +206,16 @@ suite('Injector instance', function() {
         });
     });
     
+    test('resolves npm modules', function (done) {
+        injector.bootstrap(function (err, modules) {
+            var deps = injector.resolveDependencies(['async']);
+            var async = require('async');
+            
+            assert.deepEqual(deps[0], async, 'resolves npm module as injectable module');
+            done();
+        });
+    });
+    
     test('resolves dependency of a module', function(done) {
         injector.bootstrap(function (err, modules) {
             var deps = injector.resolveDependencies([moduleName]);
@@ -214,7 +224,6 @@ suite('Injector instance', function() {
             assert.deepEqual(deps, [moduleReturn], 'returns dependency values');
             done();
         });
-        
     });
     
     test('returns imaginary dependency when dependency does not exist for module', function(done) {
@@ -250,6 +259,10 @@ suite('Injector instance', function() {
 function setUpModules (callback) {
     fs.mkdirSync(path.join(__dirname, 'modules'));
     fs.writeFileSync(path.join(__dirname, 'modules', moduleFilename), '// inject\n\nexports.' + moduleName + ' = function () {\nreturn ' + moduleReturn + ';\n};\n\nexports.' + objectModuleName + ' = {prop1: "prop value"};\n\nexports.' + stringModuleName + ' = "string module value"', 'utf8');
+}
+
+function setUpWithNpmModules (callback) {
+    
 }
 
 function tearDownModules () {

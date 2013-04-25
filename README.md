@@ -43,7 +43,7 @@ Injector.create('ApplicationName', config, function (err, injector) {
 
 ## Configuration
 
-* **directory** - a list of directories to use to look for injector modules
+* **directory** - a list of directories to use to look for injector modules (string or array)
 * **exclude** - (OPTIONAL) a list of directories to ignore when looking for injector modules
 
 ## Modules

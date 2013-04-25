@@ -99,4 +99,4 @@ npm test
 ## Changelog
 
 ### 0.3.6
-* NPM modules are not injectable like a normal Injector module. No need to call ` require('') ` in any module now.
+* NPM modules in *node_modules* directory are now injectable like a normal Injector module. No need to call ` require('') ` in any module now.

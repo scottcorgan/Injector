@@ -14,11 +14,9 @@ If you need an example to help you get started, I've created a small and easy ex
 
 [View the example of a working injector app](https://github.com/scottcorgan/Injector/tree/master/example)
 
-## Installation
+## Install
 
-```
-npm install injector --save
-```
+[![NPM](https://nodei.co/npm/injector.png)](https://nodei.co/npm/injector/)
 
 ## Setup
 

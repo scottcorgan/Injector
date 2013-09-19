@@ -4,7 +4,7 @@ Directory-independent dependency injection for Nodejs.
 
 The idea behind this module is an open, flexible, directory-independent module system that does not enforce new coding styles foreign to Nodejs.
 
-Current Version: **0.4.0**
+Current Version: **0.4.1**
 
 [![Build Status](https://travis-ci.org/scottcorgan/Injector.png)](https://travis-ci.org/scottcorgan/Injector)
 
@@ -57,7 +57,12 @@ A module in a module file will only be bootstrapped if in the folder specified i
 ```javascript
 // inject
 
-exports.SomeModule = function (SomeDependency) {
+exports.SomeModule = function (inject, SomeDependency) {
+    
+    // Injector now provides the 'inject' method, allowing
+    // you to inject core modules, npm modules, or injector
+    // modules.
+    var fs = inject('fs');
     
     // Module logic goes here
     // Return anything you want public facing

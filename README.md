@@ -96,6 +96,10 @@ npm test
 
 ## Changelog
 
+### 0.4.1
+* NEW: ` inject() ` method available for a more commonjs approach. See *examples* for usage.
+* FIXED: Breaking tests. Better coverage
+
 ### 0.4.0
 * NEW: Npm modules in *node_modules* directory are now injectable like a normal Injector module. No need to call ` require('') ` in any module now.
 * NEW: Using ` /* inject */ ` now also declares a file has having an injectable module

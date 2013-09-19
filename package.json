@@ -13,7 +13,7 @@
     "mocha": "1.8.x"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha -u tdd"
+    "test": "./node_modules/.bin/mocha -u tdd --reporter spec"
   },
   "repository": {
     "type": "git",

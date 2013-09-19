@@ -8,17 +8,9 @@ var async = require('async');
 var argsList = require('args-list');
 var assert = require('assert');
 var inject = require('./inject');
+var constants = require('./lib/constants');
 
-// Constants
-var IS_MODULE_EXP = /^(\/\/\s*|\#\s*|\/\*\s*)inject\s*/i;
-var NOT_BOOSTRAPPED = '*|*|*'; // Random(ish) string
-var SUPPORTED_FILE_EXT = ['js', 'coffee'];
-
-/**
- * Injector constructor
- * @param {String} injectorName 
- * @param {Object} args         
- */
+//
 var Injector = function (injectorName, args) {
     var self = this;
     var _args = args || {};
@@ -41,19 +33,10 @@ var Injector = function (injectorName, args) {
     assert.equal(this.modulesDirectory.indexOf('node_modules'), -1, 'Cannot put Injector modules in the node_modules directory.');
 };
 
-/**
- * Is this module an injectable module
- * @param  {String}  fileStr 
- * @return {Boolean}
- */
 Injector.isModuleFile = function (fileStr) {
-    return fileStr.match(IS_MODULE_EXP)
+    return fileStr.match(constants.IS_MODULE_EXP)
 };
 
-/**
- * Walk through the directory and collect all declared modules
- * @param  {Function} callback 
- */
 Injector.prototype.collectModules = function (callback) {
     var self = this;
     var modulesDirectory = this.modulesDirectory;
@@ -71,7 +54,7 @@ Injector.prototype.collectModules = function (callback) {
             // Only init javascript files we don't exclude
             var fileNameArr = fileStats.name.split('.');
             
-            if (self.excludeFolders.indexOf(root) > -1 || SUPPORTED_FILE_EXT.indexOf(fileNameArr[fileNameArr.length-1]) < 0) {
+            if (self.excludeFolders.indexOf(root) > -1 || constants.SUPPORTED_FILE_EXT.indexOf(fileNameArr[fileNameArr.length-1]) < 0) {
                 return next();
             }
             var fileName = path.join(root, fileStats.name);
@@ -105,11 +88,6 @@ Injector.prototype.collectModules = function (callback) {
     }, callback);
 };
 
-/**
- * Get for a module by it's name
- * @param  {String} moduleName 
- * @return {Object}            
- */
 Injector.prototype.getModule = function (moduleName) {
     var module = this.modules[moduleName];
     
@@ -120,20 +98,10 @@ Injector.prototype.getModule = function (moduleName) {
     return module;
 };
 
-/**
- * Process the module arguments
- * @param  {Object} module
- * @return {Array} args
- */
 Injector.processArgs = function (module) {
     return argsList(module);
 };
 
-/**
- * Collection our collections
- * @param  {Object} args 
- * @return {Object}
- */
 Injector.prototype.register = function (args) {
     
     var _errMsg = args.errMsg || 'Cannot have two items with the same name.';
@@ -148,26 +116,17 @@ Injector.prototype.register = function (args) {
         name: args.name,
         val: args.val,
         dependsOn: args.deps,
-        bootstrapped: NOT_BOOSTRAPPED
+        bootstrapped: constants.NOT_BOOSTRAPPED
     };
     
     // For method chaining
     return this.modules[args.name];
 };
 
-/**
- * Dependencies that don't exist return null;
- * @return {Null} 
- */
 Injector.imaginaryDependency = function () {
     return null;
 };
 
-/**
- * Resolve dependencies in list
- * @param  {Array} moduleDeps 
- * @return {Array}
- */
 Injector.prototype.resolveDependencies = function (moduleDeps) {
     // Return no dependencies if the module is undefined
     if (!moduleDeps) {
@@ -197,12 +156,6 @@ Injector.prototype.resolveDependencies = function (moduleDeps) {
     });
 };
 
-/**
- * Parse our dependencies and execute them
- * @param  {Object} module 
- * @param  {Array} deps  
- * @return {Object}
- */
 Injector.prototype.parse = function (module) {
     var self = this;
     
@@ -212,14 +165,14 @@ Injector.prototype.parse = function (module) {
     }
     
     // The module was already bootstrapped
-    if(module.bootstrapped !== NOT_BOOSTRAPPED) {
+    if(module.bootstrapped !== constants.NOT_BOOSTRAPPED) {
         return module;
     }
     
     // Resolve null dependencies
     // All deps need to be bootstrapped first
     this.resolveDependencies(module.dependsOn).forEach(function (dep, idx) {
-        if (dep === NOT_BOOSTRAPPED) {
+        if (dep === constants.NOT_BOOSTRAPPED) {
             var depName = module.dependsOn[idx];
             self.parse(self.getModule(depName));
         }
@@ -233,9 +186,6 @@ Injector.prototype.parse = function (module) {
     return module
 };
 
-/**
- * Start the injection and init the modules
- */
 Injector.prototype.bootstrap = function (callback) {
     var self = this;
     var _callback = callback || function () {};
@@ -255,12 +205,6 @@ Injector.prototype.bootstrap = function (callback) {
     
 };
 
-/**
- * Module: this is the basic dependency in the app
- * @param  {String} name  
- * @param  {Function/Object} logic 
- * @return {Function/Object}
- */
 Injector.prototype.module = function (name, logic) {
     
     // Get our dependencies
@@ -278,10 +222,6 @@ Injector.prototype.module = function (name, logic) {
     return this;
 };
 
-/**
- * Instantiants Injector with unlimited arguments
- * @return {Object}
- */
 Injector.create = function () {
     var args = Array.prototype.slice.call(arguments);
     var callback = function () {};

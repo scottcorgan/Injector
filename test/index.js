@@ -60,11 +60,11 @@ suite('Injector instantiation setup', function() {
         done();
     });
     
-    test('initializes empty set of modules', function(done) {
+    test('initializes modules with an empty set', function(done) {
         var injector = new Injector();
         
         assert.isObject(injector.modules, 'modules should be an object');
-        assert.deepEqual(injector.modules, {}, 'set the modules object to empty');
+        assert.deepEqual(injector.modules, {}, 'empty modules set');
         done();
     });
     
@@ -185,6 +185,8 @@ suite('Injector instance', function() {
     
     test('collects modules in the specified directory', function(done) {
         injector.collectModules(function (err, modules) {
+            var hasModule = false;
+            
             assert.isArray(modules, 'collects modules into an array');
             assert.isObject(modules[0], 'collects an array of objects');
             assert.equal(Object.keys(modules[0])[0], moduleName, 'adds our module to the array of modules');
@@ -236,15 +238,6 @@ suite('Injector instance', function() {
         });
     });
     
-    test('resolves npm modules', function (done) {
-        injector.bootstrap(function (err, modules) {
-            var deps = injector.resolveDependencies(['async']);
-            var async = require('async');
-            
-            assert.deepEqual(deps[0], async, 'resolves npm module as injectable module');
-            done();
-        });
-    });
     
     test('resolves dependency of a module', function(done) {
         injector.bootstrap(function (err, modules) {
@@ -254,11 +247,6 @@ suite('Injector instance', function() {
             assert.deepEqual(deps, [moduleReturn], 'returns dependency values');
             done();
         });
-    });
-    
-    test('returns imaginary dependency when dependency does not exist for module', function(done) {
-        assert.deepEqual(injector.resolveDependencies(['notAModule']), [null], 'null for no module and/or dependency');
-        done();
     });
     
     test('parses our module and bootstraps it', function (done) {
@@ -281,11 +269,66 @@ suite('Injector instance', function() {
         assert.isDefined(injector.getModule(moduleName), 'registers the module with the helper function');
         done();
     });
+});
+
+suite('Injected modules', function () {
+    var injector;
     
+    setup(function(done){
+        setUpModules();
+        
+        injector = new Injector('TestApp', {
+            directory: [moduleDir]
+        });
+        
+        done();
+    });
+
+    teardown(function(done){
+        tearDownModules();
+        done();
+    });
+    
+    test('returns imaginary dependency when dependency does not exist for module', function(done) {
+        assert.deepEqual(injector.resolveDependencies(['notAModule']), [null], 'null for no module and/or dependency');
+        done();
+    });
+    
+    test('resolves npm modules', function (done) {
+        injector.bootstrap(function (err, modules) {
+            var deps = injector.resolveDependencies(['async']);
+            var async = require('async');
+            
+            assert.deepEqual(deps[0], async, 'resolves npm module as injectable module');
+            done();
+        });
+    });
+    
+    test('provides a default INJECT method to resolve npm and core modules', function (done) {
+        var moduleValue = 'moduleValue';
+        
+        injector.module('moduleToInject', moduleValue);
+        injector.module('testInjectModule', function (inject) {
+            assert.isFunction(inject, 'inject is a function');
+            
+            var fs = inject('fs');
+            var requireFs = require('fs');
+            assert.deepEqual(fs, requireFs, 'injected node core module');
+            
+            var injectedModule = inject('moduleToInject');
+            assert.equal(injectedModule, moduleValue, 'injected an injector module');
+            
+            var nullModule = inject('nothing');
+            assert.isNull(nullModule, 'module is null if it does not exist');
+            
+            done();
+        });
+        
+        injector.bootstrap(function (err, modules) {});
+    });
 });
 
 //
-
 function setUpModules (callback) {
     fs.mkdirSync(path.join(__dirname, 'modules'));
     fs.writeFileSync(path.join(__dirname, 'modules', moduleFilename), '// inject\n\nexports.' + moduleName + ' = function () {\nreturn ' + moduleReturn + ';\n};\n\nexports.' + objectModuleName + ' = {prop1: "prop value"};\n\nexports.' + stringModuleName + ' = "string module value"', 'utf8');

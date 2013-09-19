@@ -7,6 +7,7 @@ var path = require('path');
 var async = require('async');
 var argsList = require('args-list');
 var assert = require('assert');
+var inject = require('./inject');
 
 // Constants
 var IS_MODULE_EXP = /^(\/\/\s*|\#\s*|\/\*\s*)inject\s*/i;
@@ -110,7 +111,13 @@ Injector.prototype.collectModules = function (callback) {
  * @return {Object}            
  */
 Injector.prototype.getModule = function (moduleName) {
-    return this.modules[moduleName];
+    var module = this.modules[moduleName];
+    
+    if (moduleName === 'inject') {
+        module = inject(this);
+    }
+    
+    return module;
 };
 
 /**
@@ -182,7 +189,6 @@ Injector.prototype.resolveDependencies = function (moduleDeps) {
             }
             catch (e) {}
             
-            //
             return module
         }
         

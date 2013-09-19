@@ -1,3 +1,4 @@
 npm-degub.log
 *.log
 .idea/*
+node_modules/

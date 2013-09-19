@@ -52,14 +52,6 @@ suite('Injector instantiation setup', function() {
         done();
     });
     
-    test('initializes modules with an empty set', function(done) {
-        var injector = new Injector();
-        
-        assert.isObject(injector.modules, 'modules should be an object');
-        assert.deepEqual(injector.modules, {}, 'empty modules set');
-        done();
-    });
-    
     test('does not allow node_modules directory to have modules', function (done) {
         var inject = function () {
             new Injector('', {
@@ -212,7 +204,7 @@ suite('Injector instance', function() {
         var registerModule = function (name, depName) {
             return injector.register({
                 name: name,
-                val: moduleValue,
+                definition: moduleValue,
                 dependsOn: [depName]
             });
         };
@@ -282,7 +274,7 @@ suite('Injected modules', function () {
             done();
         });
         
-        injector.bootstrap(function (err, modules) {});
+        injector.bootstrap();
     });
 });
 

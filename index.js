@@ -67,13 +67,7 @@ Injector.prototype.collectModules = function (callback) {
 };
 
 Injector.prototype.getModule = function (moduleName) {
-    var module = this.modules[moduleName];
-    
-    if (moduleName === 'inject') {
-        module = inject(this);
-    }
-    
-    return module;
+    return this.modules[moduleName];
 };
 
 Injector.prototype.register = function (args) {
@@ -87,8 +81,8 @@ Injector.prototype.register = function (args) {
     
     this.modules[args.name] = {
         name: args.name,
-        val: args.val,
-        dependsOn: args.deps,
+        definition: args.definition,
+        dependsOn: args.deps || [],
         bootstrapped: constants.NOT_BOOSTRAPPED
     };
     
@@ -125,11 +119,11 @@ Injector.prototype.resolveDependencies = function (moduleDeps) {
 Injector.prototype.parse = function (module) {
     var self = this;
     
-    if (typeof module.val !== 'function') {
-        module.bootstrapped = module.val;
+    if (typeof module.definition !== 'function') {
+        module.bootstrapped = module.definition;
     }
     
-    if(module.bootstrapped !== constants.NOT_BOOSTRAPPED) {
+    if(module.bootstrapped && module.bootstrapped !== constants.NOT_BOOSTRAPPED) {
         return module;
     }
     
@@ -143,14 +137,22 @@ Injector.prototype.parse = function (module) {
     });
     
     var deps = this.resolveDependencies(module.dependsOn);
-    module.bootstrapped = module.val.apply(self, deps);
-    return module
+    module.bootstrapped = module.definition.apply(self, deps);
+    
+    return module;
+};
+
+Injector.prototype.registerCoreModules = function () {
+    var injector = this;
+    
+    this.register(inject(injector));
 };
 
 Injector.prototype.bootstrap = function (callback) {
     var self = this;
     var _callback = callback || function () {};
     
+    this.registerCoreModules();
     this.collectModules(function (modules) {
         async.each(Object.keys(self.modules), function (moduleName, cb) {
             self.parse(self.getModule(moduleName));
@@ -167,7 +169,7 @@ Injector.prototype.module = function (name, logic) {
     var deps = utils.processArgs(logic);
     var module = this.register({
         name: name,
-        val: logic,
+        definition: logic,
         deps: deps,
         errMsg: 'Cannot have two modules with the same name.'
     });

@@ -105,27 +105,6 @@ suite('Injector static methods', function() {
         modulesHelper.tearDownModules();
     });
     
-    test('process arguments of a module', function(done) {
-        var noArgsModule = 'function () {}';
-        var argsModule = 'function (SomeArg, AnotherArg) {}';
-        
-        assert.deepEqual(Injector.processArgs(noArgsModule), [], 'no arguments returns blank array');
-        assert.deepEqual(Injector.processArgs(argsModule), ['SomeArg', 'AnotherArg'], 'parses arguments into array');
-        done();
-    });
-    
-    test('trims whitespace from arguments list', function (done) {
-        var modSpace = function ( spaceArg ) {};
-        
-        assert.deepEqual(Injector.processArgs(modSpace), ['spaceArg'], 'trimmed whitespace in array items');
-        done();
-    });
-    
-    test('makes imaginary dependency', function (done) {
-        assert.isNull(Injector.imaginaryDependency(), 'imaginary dependency returns null');
-        done();
-    });
-    
     test('create an instance of Injector', function (done) {        
         Injector.create('TestApp', {
             directory: [modulesHelper.moduleDir]

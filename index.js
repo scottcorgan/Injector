@@ -5,7 +5,6 @@ var walk = require('walk');
 var fs = require('fs');
 var path = require('path');
 var async = require('async');
-var argsList = require('args-list');
 var assert = require('assert');
 var inject = require('./lib/inject');
 var constants = require('./lib/constants');
@@ -95,10 +94,6 @@ Injector.prototype.getModule = function (moduleName) {
     return module;
 };
 
-Injector.processArgs = function (module) {
-    return argsList(module);
-};
-
 Injector.prototype.register = function (args) {
     
     var _errMsg = args.errMsg || 'Cannot have two items with the same name.';
@@ -120,10 +115,6 @@ Injector.prototype.register = function (args) {
     return this.modules[args.name];
 };
 
-Injector.imaginaryDependency = function () {
-    return null;
-};
-
 Injector.prototype.resolveDependencies = function (moduleDeps) {
     // Return no dependencies if the module is undefined
     if (!moduleDeps) {
@@ -137,7 +128,7 @@ Injector.prototype.resolveDependencies = function (moduleDeps) {
         var module = self.getModule(depName);
         
         if(depName === '' || !module) {
-            module = Injector.imaginaryDependency();
+            module = utils.imaginaryDependency();
             
             // Look for module in node_modules folder
             try{
@@ -205,7 +196,7 @@ Injector.prototype.bootstrap = function (callback) {
 Injector.prototype.module = function (name, logic) {
     
     // Get our dependencies
-    var deps = Injector.processArgs(logic);
+    var deps = utils.processArgs(logic);
     
     // Register the module
     var module = this.register({

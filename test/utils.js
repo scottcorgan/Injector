@@ -15,4 +15,29 @@ suite('Utils', function () {
       assert.isNotNull(utils.isModuleFile(coffeescriptModuleFileStr), 'coffeescript file that starts with "# inject is" module file');
       done();
   });
+  
+  test('parses the arguments of the module', function (done) {
+    var noArgsModule = 'function () {}';
+    var argsModule = 'function (SomeArg, AnotherArg) {}';
+    
+    assert.deepEqual(utils.processArgs(noArgsModule), [], 'no arguments returns blank array');
+    assert.deepEqual(utils.processArgs(argsModule), ['SomeArg', 'AnotherArg'], 'parses arguments into array');
+    done();
+  });
+  
+  test('trims whitespace from arguments list', function (done) {
+      var modSpace = function ( spaceArg ) {};
+      
+      assert.deepEqual(utils.processArgs(modSpace), ['spaceArg'], 'trimmed whitespace in array items');
+      done();
+  });
+  
+  test('provides an imaginary dependency', function (done) {
+    done();
+  });
+  
+  test('returns imaginary dependency when dependency does not exist for module', function(done) {
+      assert.isNull(utils.imaginaryDependency(), 'null is imaginary');
+      done();
+  });
 });

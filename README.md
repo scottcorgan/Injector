@@ -4,7 +4,7 @@ Directory-independent dependency injection for Nodejs.
 
 The idea behind this module is an open, flexible, directory-independent module system that does not enforce new coding styles foreign to Nodejs.
 
-Current Version: **0.4.1**
+Current Version: **0.4.2**
 
 [![Build Status](https://travis-ci.org/scottcorgan/Injector.png)](https://travis-ci.org/scottcorgan/Injector)
 
@@ -101,7 +101,7 @@ npm test
 
 ## Changelog
 
-### 0.4.1
+### 0.4.2
 * NEW: ` inject() ` method available for a more commonjs approach. See *examples* for usage.
 * FIXED: Breaking tests. Better coverage
 

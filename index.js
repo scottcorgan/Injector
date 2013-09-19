@@ -1,5 +1,3 @@
-"use strict";
-
 // Node modules
 var walk = require('walk');
 var fs = require('fs');

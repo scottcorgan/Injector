@@ -32,10 +32,6 @@ suite('Utils', function () {
       done();
   });
   
-  test('provides an imaginary dependency', function (done) {
-    done();
-  });
-  
   test('returns imaginary dependency when dependency does not exist for module', function(done) {
       assert.isNull(utils.imaginaryDependency(), 'null is imaginary');
       done();

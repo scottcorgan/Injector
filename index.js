@@ -7,8 +7,9 @@ var path = require('path');
 var async = require('async');
 var argsList = require('args-list');
 var assert = require('assert');
-var inject = require('./inject');
+var inject = require('./lib/inject');
 var constants = require('./lib/constants');
+var utils = require('./lib/utils');
 
 //
 var Injector = function (injectorName, args) {
@@ -31,10 +32,6 @@ var Injector = function (injectorName, args) {
     assert.notEqual(typeof _args.directory, 'function', 'Directory must be an array or a string');
     assert.notEqual(typeof this.modulesDirectory.indexOf, 'undefined', 'Directory cannot be an object');
     assert.equal(this.modulesDirectory.indexOf('node_modules'), -1, 'Cannot put Injector modules in the node_modules directory.');
-};
-
-Injector.isModuleFile = function (fileStr) {
-    return fileStr.match(constants.IS_MODULE_EXP)
 };
 
 Injector.prototype.collectModules = function (callback) {
@@ -61,7 +58,7 @@ Injector.prototype.collectModules = function (callback) {
             
             // Read file as string and match against injector
             fs.readFile(fileName, 'utf8', function (err, file) {
-                if (Injector.isModuleFile(file)) {
+                if (utils.isModuleFile(file)) {
                     
                     // Add the modules if it's an injectable set
                     var modules = require(fileName);

@@ -6,7 +6,7 @@ var fs = require('fs');
 var path = require('path');
 var async = require('async');
 var assert = require('assert');
-var inject = require('./lib/inject');
+var inject = require('./lib/core/inject');
 var constants = require('./lib/constants');
 var utils = require('./lib/utils');
 

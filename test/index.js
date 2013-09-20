@@ -276,5 +276,14 @@ suite('Injected modules', function () {
         
         injector.bootstrap();
     });
+    
+    test('can manully inject module from the instance variable', function (done) {
+        injector.bootstrap(function () {
+            var injectedModule = injector.inject(modulesHelper.moduleName);
+            assert.ok(injectedModule);
+            assert.equal(injectedModule, modulesHelper.moduleReturn, 'injects the module');
+            done();
+        });
+    });
 });
 

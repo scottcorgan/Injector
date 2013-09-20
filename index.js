@@ -70,6 +70,16 @@ Injector.prototype.getModule = function (moduleName) {
     return this.modules[moduleName];
 };
 
+Injector.prototype.inject = function (moduleName) {
+    var module = this.getModule(moduleName);
+    
+    if (!module) {
+        return utils.imaginaryDependency();
+    }
+    
+    return module.bootstrapped;
+};
+
 Injector.prototype.register = function (args) {
     
     var _errMsg = args.errMsg || 'Cannot have two items with the same name.';

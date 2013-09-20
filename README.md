@@ -4,7 +4,7 @@ Directory-independent dependency injection for Nodejs.
 
 The idea behind this module is an open, flexible, directory-independent module system that does not enforce new coding styles foreign to Nodejs.
 
-Current Version: **0.4.3**
+Current Version: **0.4.4**
 
 [![Build Status](https://travis-ci.org/scottcorgan/Injector.png)](https://travis-ci.org/scottcorgan/Injector)
 
@@ -36,6 +36,9 @@ var config = {
 // Set up our application
 Injector.create('ApplicationName', config, function (err, injector) {
     // Callback code goes here
+    
+    // Need to get to a module at this point?
+    var yourModule = injector.inject('yourModuleName');
 });
 ```
 
@@ -100,6 +103,9 @@ npm test
 ```
 
 ## Changelog
+
+### 0.4.4
+* NEW: Manually inject a module from the injector instance variable with ` injector.inject(moduleName) `
 
 ### 0.4.3
 * FIXED: Refactored loading internal core modules. Exciting for future features!

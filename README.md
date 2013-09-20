@@ -35,10 +35,7 @@ var config = {
 
 // Set up our application
 Injector.create('ApplicationName', config, function (err, injector) {
-    // Callback code goes here
-    
-    // Need to get to a module at this point?
-    var yourModule = injector.inject('yourModuleName');
+    //
 });
 ```
 

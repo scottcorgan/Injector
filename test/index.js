@@ -277,6 +277,19 @@ suite('Injected modules', function () {
         injector.bootstrap();
     });
     
+    test('resolves dependencies defined by "inject" for the module', function (done) {
+        var moduleValue = 'moduleValue';
+        
+        injector.module('testInjectModule', function (inject) {
+            var injectedModule = inject('moduleToInject');
+            assert.equal(injectedModule, moduleValue, 'injected an injector module');
+            done();
+        });
+        
+        injector.module('moduleToInject', moduleValue);
+        injector.bootstrap(); 
+    });
+    
     test('can manully inject module from the instance variable', function (done) {
         injector.bootstrap(function () {
             var injectedModule = injector.inject(modulesHelper.moduleName);

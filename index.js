@@ -20,6 +20,7 @@ var Injector = function (injectorName, args) {
     this.modulesDirectory = _args.directory || ['./'];
     this.excludeFolders = _args.exclude || [];
     this.modules = {};
+    this.constants = constants;
     
     assert.notEqual(typeof _args.directory, 'function', 'Directory must be an array or a string');
     assert.notEqual(typeof this.modulesDirectory.indexOf, 'undefined', 'Directory cannot be an object');
@@ -121,7 +122,6 @@ Injector.prototype.resolveDependencies = function (moduleDeps) {
             return module
         }
         
-        //
         return module.bootstrapped;
     });
 };

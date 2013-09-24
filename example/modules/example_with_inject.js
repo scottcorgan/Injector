@@ -13,6 +13,6 @@ exports.withInject = function (inject) {
   
   // This injects the "constants" module in the "example_values.js"
   // file
-  var constants = inject('constants')
+  var constants = inject('constants');
   console.log(constants.PI);
 }

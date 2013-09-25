@@ -93,13 +93,21 @@ exports.AnyName = {
 exports.SOME_CONSTANT = 'some value';
 ```
 
-## Writing tests with **Injector**
+## Writing unit tests with **Injector**
 
-The whole point of dependency injection, especially with Injector, is to create an MUCH easier way to write tests around your code.
+The whole point of dependency injection, especially with Injector, is to create a MUCH easier and reliable way to write tests around your code.
 
-Injector makes TDD (Test Driven Development) very easy by allowing you to mock dependencies in the Injector instance. See the following example for a how-to:
+Injector makes TDD (Test Driven Development) very easy by allowing you to mock dependencies through the Injector instance. See the following example for a how-to:
 
 ```javascript
+
+var Injector = require('injector');
+
+// Inject are app
+Injector.create('AppName', {
+    directory: 'someDirectory',
+    mock
+}
 
 ```
 

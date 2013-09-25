@@ -138,7 +138,7 @@ npm test
 ## Changelog
 
 ### 0.5.1
-* FIXED: Mocking dependcies now works with core and npm modules (i.e. async, path, fs, etc.).
+* FIXED: Mocking dependencies now works with core and npm modules (i.e. async, path, fs, etc.).
 
 ### 0.5.0
 * NEW: [Inject mocked dependencies](https://github.com/scottcorgan/Injector#writing-unit-tests-with-injector). Makes unit testing your code a breeze!

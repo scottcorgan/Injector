@@ -23,7 +23,9 @@ suite('Mocking modules', function() {
         },
         StringModule: function (ModuleName) {
           return ModuleName();
-        }
+        },
+        path: 'path',
+        async: 'async'
       }
     }, function (err, _injector) {
       injector = _injector
@@ -55,5 +57,13 @@ suite('Mocking modules', function() {
     assert.deepEqual(['fs'], moduleDef.dependsOn, 'has correct dependecies list');
     assert.equal(module(), _mockData, 'module returned mocked data');
     assert.deepEqual(stringModule, fs, 'mocked dependencies are injected');
+  });
+  
+  test('should inject mocked npm and core module if defined', function () {
+    var path = injector.inject('path');
+    var async = injector.inject('async');
+    
+    assert.equal(path, 'path', 'mock core module');
+    assert.equal(async, 'async', 'mock npm module');
   });
 });

@@ -4,7 +4,7 @@ Directory-independent dependency injection for Nodejs.
 
 The idea behind this module is an open, flexible, directory-independent module system that does not enforce new coding styles foreign to Nodejs.
 
-Current Version: **0.5.0**
+Current Version: **0.5.1**
 
 [![Build Status](https://travis-ci.org/scottcorgan/Injector.png)](https://travis-ci.org/scottcorgan/Injector)
 
@@ -136,6 +136,9 @@ npm test
 ```
 
 ## Changelog
+
+#### 0.5.1
+* FIXED: Mocking dependcies now works with core and npm modules (i.e. async, path, fs, etc.).
 
 ### 0.5.0
 * NEW: [Inject mocked dependencies](https://github.com/scottcorgan/Injector#writing-unit-tests-with-injector). Makes unit testing your code a breeze!

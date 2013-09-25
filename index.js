@@ -31,6 +31,7 @@ var Injector = function (injectorName, args) {
 Injector.prototype.collectModules = function (callback) {
     var self = this;
     var modulesDirectory = this.modulesDirectory;
+    var mockedModules = this.mockedModules || {};
     
     async.map(modulesDirectory, function (directory, moduleCB) {
         var walker = walk.walk(directory, { followLinks: false });
@@ -51,12 +52,6 @@ Injector.prototype.collectModules = function (callback) {
                     return async.each(Object.keys(modules), function (moduleName, cb) {
                         var module = modules[moduleName];
                         
-                        // Replace module definition with mocked
-                        // definition
-                        if (self.mockedModules && self.mockedModules[moduleName]) {
-                            module = self.mockedModules[moduleName];
-                        }
-                        
                         self.module(moduleName, module);
                         cb(null);
                     }, next);
@@ -68,9 +63,10 @@ Injector.prototype.collectModules = function (callback) {
         });
         
         walker.on('end', function () {
-            moduleCB(null, self.modules);      
+            self.registerMockModules(function (err, mockedModules) {
+                moduleCB(null, self.modules);
+            });
         });
-        
         
     }, callback);
 };
@@ -83,12 +79,11 @@ Injector.prototype.inject = function(moduleName) {
     return this.getModule('inject').bootstrapped(moduleName);
 };
 
-Injector.prototype.register = function (args) {
-    
+Injector.prototype.register = function (args, override) {
     var _errMsg = args.errMsg || 'Cannot have two items with the same name.';
     
     // Test for duplications
-    if (args.name in this.modules) {
+    if (!override && args.name in this.modules) {
         throw new Error('Tried to overwrite "' + args.name + '". ' + _errMsg);
     }
     
@@ -158,6 +153,18 @@ Injector.prototype.registerCoreModules = function () {
     this.register(inject(injector));
 };
 
+Injector.prototype.registerMockModules = function (callback) {
+    var self = this;
+    var mockedModules = this.mockedModules || {};
+    
+    async.each(Object.keys(mockedModules), function (moduleName, cb) {
+        self.module(moduleName, self.mockedModules[moduleName], true);
+        cb();
+    }, function () {
+        callback(null, mockedModules);      
+    });
+};
+
 Injector.prototype.bootstrap = function (callback) {
     var self = this;
     var _callback = callback || function () {};
@@ -175,7 +182,7 @@ Injector.prototype.bootstrap = function (callback) {
     });
 };
 
-Injector.prototype.module = function (name, logic) {
+Injector.prototype.module = function (name, logic, override) {
     var moduleObj = {
         name: name,
         definition: logic,
@@ -183,7 +190,7 @@ Injector.prototype.module = function (name, logic) {
         errMsg: 'Cannot have two modules with the same name.',
     };
     
-    var module = this.register(moduleObj);
+    var module = this.register(moduleObj, override);
     return this;
 };
 

@@ -2,7 +2,7 @@
   "name": "injector",
   "version": "0.5.0",
   "main": "index.js",
-  "description": "Dependency injection for Nodejs apps and testing.",
+  "description": "Dependency injection for Nodejs apps and unit testing.",
   "dependencies": {
     "walk": "2.x.x",
     "async": "0.2.x",

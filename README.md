@@ -43,6 +43,7 @@ Injector.create('ApplicationName', config, function (err, injector) {
 
 * **directory** - a list of directories to use to look for injector modules (string or array)
 * **exclude** - (OPTIONAL) a list of directories to ignore when looking for injector modules
+* **mock** - (OPTIONAL) an object whose keys are module names and values are mocked definitions to override the original module definition. Most likely used for writing unit tests. See [Writing unit tests with Injector](https://github.com/scottcorgan/Injector#writing-unit-tests-with-injector) for an example of how to mock injector dependencies.
 
 ## Modules
 
@@ -135,6 +136,10 @@ npm test
 ```
 
 ## Changelog
+
+### 0.5.0
+* NEW: [Inject mocked dependencies](https://github.com/scottcorgan/Injector#writing-unit-tests-with-injector). Makes unit testing your code a breeze!
+* FIXED: More reliable manual dependency injection using ` inject `
 
 ### 0.4.5
 * FIXED: Modules using the ` inject ` method exploded if dependency had not been bootstrapped.

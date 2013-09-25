@@ -21,6 +21,7 @@ var Injector = function (injectorName, args) {
     this.excludeFolders = _args.exclude || [];
     this.modules = {};
     this.constants = constants;
+    this.mockedModules = _args.mock;
     
     assert.notEqual(typeof _args.directory, 'function', 'Directory must be an array or a string');
     assert.notEqual(typeof this.modulesDirectory.indexOf, 'undefined', 'Directory cannot be an object');
@@ -49,6 +50,13 @@ Injector.prototype.collectModules = function (callback) {
                     
                     return async.each(Object.keys(modules), function (moduleName, cb) {
                         var module = modules[moduleName];
+                        
+                        // Replace module definition with mocked
+                        // definition
+                        if (self.mockedModules && self.mockedModules[moduleName]) {
+                            module = self.mockedModules[moduleName];
+                        }
+                        
                         self.module(moduleName, module);
                         cb(null);
                     }, next);
@@ -71,14 +79,8 @@ Injector.prototype.getModule = function (moduleName) {
     return this.modules[moduleName];
 };
 
-Injector.prototype.inject = function (moduleName) {
-    var module = this.getModule(moduleName);
-    
-    if (!module) {
-        return utils.imaginaryDependency();
-    }
-    
-    return module.bootstrapped;
+Injector.prototype.inject = function(moduleName) {
+    return this.getModule('inject').bootstrapped(moduleName);
 };
 
 Injector.prototype.register = function (args) {
@@ -93,7 +95,7 @@ Injector.prototype.register = function (args) {
     this.modules[args.name] = {
         name: args.name,
         definition: args.definition,
-        dependsOn: args.deps || [],
+        dependsOn: args.dependsOn || [],
         bootstrapped: constants.NOT_BOOSTRAPPED
     };
     
@@ -145,7 +147,6 @@ Injector.prototype.parse = function (module) {
             self.parse(self.getModule(depName));
         }
     });
-    
     var deps = this.resolveDependencies(module.dependsOn);
     module.bootstrapped = module.definition.apply(self, deps);
     
@@ -154,7 +155,6 @@ Injector.prototype.parse = function (module) {
 
 Injector.prototype.registerCoreModules = function () {
     var injector = this;
-    
     this.register(inject(injector));
 };
 
@@ -165,25 +165,25 @@ Injector.prototype.bootstrap = function (callback) {
     this.registerCoreModules();
     this.collectModules(function (modules) {
         async.each(Object.keys(self.modules), function (moduleName, cb) {
-            self.parse(self.getModule(moduleName));
+            var moduleDefinition = self.getModule(moduleName);
+            self.parse(moduleDefinition);
+            
             cb();
         }, function (err) {
             _callback(null, self.modules);
         });
     });
-    
-    
 };
 
 Injector.prototype.module = function (name, logic) {
-    var deps = utils.processArgs(logic);
-    var module = this.register({
+    var moduleObj = {
         name: name,
         definition: logic,
-        deps: deps,
-        errMsg: 'Cannot have two modules with the same name.'
-    });
+        dependsOn: utils.processArgs(logic),
+        errMsg: 'Cannot have two modules with the same name.',
+    };
     
+    var module = this.register(moduleObj);
     return this;
 };
 

@@ -4,7 +4,7 @@ Directory-independent dependency injection for Nodejs.
 
 The idea behind this module is an open, flexible, directory-independent module system that does not enforce new coding styles foreign to Nodejs.
 
-Current Version: **0.4.5**
+Current Version: **0.5.0**
 
 [![Build Status](https://travis-ci.org/scottcorgan/Injector.png)](https://travis-ci.org/scottcorgan/Injector)
 
@@ -93,7 +93,18 @@ exports.AnyName = {
 exports.SOME_CONSTANT = 'some value';
 ```
 
-## Run tests
+## Writing tests with **Injector**
+
+The whole point of dependency injection, especially with Injector, is to create an MUCH easier way to write tests around your code.
+
+Injector makes TDD (Test Driven Development) very easy by allowing you to mock dependencies in the Injector instance. See the following example for a how-to:
+
+```javascript
+
+```
+
+
+## Run **Injector's** tests
 
 ```
 npm test

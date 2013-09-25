@@ -11,7 +11,7 @@ var stringModuleName = exports.stringModuleName = 'StringModule';
 
 exports.setUpModules = function (callback) {
     fs.mkdirSync(moduleDir);
-    fs.writeFileSync(moduleFile, '// inject\n\nexports.' + moduleName + ' = function () {\nreturn ' + moduleReturn + ';\n};\n\nexports.' + objectModuleName + ' = {prop1: "prop value"};\n\nexports.' + stringModuleName + ' = "string module value"', 'utf8');
+    fs.writeFileSync(moduleFile, '// inject\n\nexports.' + moduleName + ' = function (fs, ' + objectModuleName + ') {\nreturn ' + moduleReturn + ';\n};\n\nexports.' + objectModuleName + ' = {prop1: "prop value"};\n\nexports.' + stringModuleName + ' = "string module value"', 'utf8');
 };
 
 exports.tearDownModules = function () {

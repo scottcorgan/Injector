@@ -106,11 +106,27 @@ var Injector = require('injector');
 // Inject are app
 Injector.create('AppName', {
     directory: 'someDirectory',
-    mock
-}
+    
+    // Here's where you mock dependencies.
+    // Just use the dependency's name and redefine it.
+    // You can even use dependency injection in the mocks.
+    mock: {
+        SomeModuleToMock: function (fs) {
+            return function () {
+                // Module logic here
+                return fs;
+            }
+        }
+    }
+}, function (err, injector) {
+    // App injected
+});
 
 ```
 
+Now that we've mocked the module ` SomeModuleToMock `, wherever it's injected into other modules, the mock will be injected instead of the original module definition. This is incredibly useful for avoiding network requests or database writes while running your unit tests.
+
+An example of where you might use this would be with a [Redis](https://github.com/mranney/node_redis) connection. Instead of actually connecting to a Redis client, you can mock out Redis to load the module [fakeredis](https://github.com/hdachev/fakeredis). Now writing unit tests around Redis interactions becomes far less painful and reduces the time it takes to run the tests.
 
 ## Run **Injector's** tests
 

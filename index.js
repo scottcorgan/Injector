@@ -22,6 +22,7 @@ var Injector = function (injectorName, args) {
     this.modules = {};
     this.constants = constants;
     this.mockedModules = _args.mock;
+    this.aliases = _args.aliases || {};
     
     assert.notEqual(typeof _args.directory, 'function', 'Directory must be an array or a string');
     assert.notEqual(typeof this.modulesDirectory.indexOf, 'undefined', 'Directory cannot be an object');
@@ -87,10 +88,18 @@ Injector.prototype.register = function (args, override) {
         throw new Error('Tried to overwrite "' + args.name + '". ' + _errMsg);
     }
     
+    var dependsOn = args.dependsOn || [];
+    for (var k in dependsOn) {
+        var alias = this.aliases[dependsOn[k]];
+        if (alias) {
+            dependsOn[k] = alias;
+        }
+    }
+
     this.modules[args.name] = {
         name: args.name,
         definition: args.definition,
-        dependsOn: args.dependsOn || [],
+        dependsOn: dependsOn,
         bootstrapped: constants.NOT_BOOSTRAPPED
     };
     
@@ -125,7 +134,7 @@ Injector.prototype.resolveDependencies = function (moduleDeps) {
 
 Injector.prototype.parse = function (module) {
     var self = this;
-    
+
     if (typeof module.definition !== 'function') {
         module.bootstrapped = module.definition;
     }
